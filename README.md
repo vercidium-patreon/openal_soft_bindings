@@ -1,16 +1,15 @@
 # OpenAL Soft Bindings for C#
 
-Modern, high-performance C# bindings for OpenAL Soft, providing clean and idiomatic .NET APIs for 3D audio.
+Modern, high-performance C# bindings for OpenAL Soft, with managed wrappers for ease of use.
 
 ## Features
 
-- **Modern C# Interop**: Uses `LibraryImport`, `Span<T>`, and collection expressions for optimal performance
-- **Zero-Allocation Design**: Leverages stack allocation and spans to minimize heap allocations in performance-critical paths
-- **Complete Coverage**: Supports OpenAL 1.0, 1.1, and extensions including:
-  - Effects Extension (EFX) for audio effects and filters
-  - OpenAL Extensions (ALEXT) for latest functionality
+- **Modern C# Interop**: Uses `LibraryImport` and `Span<T>` for optimal performance
+- **Zero-Allocation Design**: Leverages stack allocation and spans to minimize heap allocations
+- **Complete Coverage**: Supports OpenAL 1.0, OpenAL 1.1, and:
+  - Effects Extensions (EFX) for audio effects and filters
+  - OpenAL Extensions (ALEXT, SOFT) for latest functionality
   - Debug extensions for development
-- **Thread-Safe**: Proper synchronization for multithreaded audio applications
 - **Managed Wrappers**: High-level managed classes for common scenarios:
   - `ALDevice` for device management
   - `ALContext` for context creation and management
@@ -21,7 +20,10 @@ Modern, high-performance C# bindings for OpenAL Soft, providing clean and idioma
 ## Requirements
 
 - .NET 8.0 or later
-- OpenAL Soft library (soft_oal.dll on Windows, libopenal.so on Linux, etc.)
+- OpenAL Soft library:
+  - soft_oal.dll on Windows
+  - libopenal.so on Linux
+  - libopenal.1.dylib on OSX
 
 ## Quick Start
 
@@ -51,8 +53,8 @@ context.MakeCurrent();
 uint buffer = AL.GenBuffer();
 uint source = AL.GenSource();
 
-// Load audio data into buffer (PCM data)
-AL.BufferData(buffer, AL.AL_FORMAT_MONO16, audioData, sampleRate);
+// Load PCM data into the buffer
+AL.BufferData(buffer, AL.AL_FORMAT_MONO16, pcmData, sampleRate);
 
 // Configure and play the source
 AL.Sourcei(source, AL.AL_BUFFER, (int)buffer);
@@ -66,7 +68,7 @@ context.Destroy();
 device.Close();
 ```
 
-### Using Effects (EFX)
+### Effects (EFX)
 
 ```csharp
 // Generate an effect and auxiliary send
@@ -85,7 +87,7 @@ AL.AuxiliaryEffectSloti(auxSlot, AL.AL_EFFECTSLOT_EFFECT, (int)effect);
 AL.Source3i(source, AL.AL_AUXILIARY_SEND_FILTER, (int)auxSlot, 0, AL.AL_FILTER_NULL);
 ```
 
-### 3D Positional Audio
+### 3D Spatialised Audio
 
 ```csharp
 // Set listener orientation using span
@@ -110,21 +112,21 @@ The library is organized into several layers:
 
 Low-level P/Invoke declarations that directly wrap OpenAL native functions:
 
-- `ALBindings.cs` - Core OpenAL functions
-- `ALCBindings.cs` - Context management functions
-- `EFXBindings.cs` - Effects extension functions
+- `ALBindings.cs` - Core OpenAL
+- `ALCBindings.cs` - Context management
+- `EFXBindings.cs` - Effects and filters
 - `ALEXTBindings.cs` - OpenAL extensions
-- `DebugBindings.cs` - Debug extension functions
+- `DebugBindings.cs` - Debug callback
 
 ### Public API (`public/`)
 
-Clean C# wrappers that provide idiomatic .NET interfaces:
+Clean C# wrappers for functions and constants:
 
-- `AL.cs` - Main OpenAL functions
+- `AL.cs` - Core OpenAL
 - `ALC.cs` - Context management
 - `EFX.cs` - Effects and filters
-- `ALEXT.cs` - Extension functions
-- `*Constants.cs` - Strongly-typed constants
+- `ALEXT.cs` - OpenAL extensions
+- `*Constants.cs` - OpenAL constants
 
 ### Managed Wrappers (`managed/`)
 
