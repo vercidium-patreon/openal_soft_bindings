@@ -1,0 +1,9 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="dllmap">
+		<xs:complexType>
+			<xs:attribute name="dll" type="xs:string" use="required"/>
+			<xs:attribute name="os" type="xs:string" use="optional"/>
+			<xs:attribute name="target" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openal_soft_bindings", "openal_soft_bindings.csproj", "{6C9B303F-FA5F-6E30-CAF7-4B0C2C76EA7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C9B303F-FA5F-6E30-CAF7-4B0C2C76EA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9B303F-FA5F-6E30-CAF7-4B0C2C76EA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9B303F-FA5F-6E30-CAF7-4B0C2C76EA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9B303F-FA5F-6E30-CAF7-4B0C2C76EA7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F85B53E-2CAA-4759-9613-8BC51BA8351D}
+	EndGlobalSection
+EndGlobal
