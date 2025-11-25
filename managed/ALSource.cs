@@ -11,10 +11,10 @@ public unsafe class ALSource
         this.ID = ID;
     }
 
-    public virtual void Play() => AL.SourcePlay(ID);
-    public virtual void Stop() => AL.SourceStop(ID);
+    public void Play() => AL.SourcePlay(ID);
+    public void Stop() => AL.SourceStop(ID);
 
-    public virtual bool Finished() => !looping && AL.GetSourcei(ID, AL.AL_SOURCE_STATE) == AL.AL_STOPPED;
+    public bool Finished() => !looping && AL.GetSourcei(ID, AL.AL_SOURCE_STATE) == AL.AL_STOPPED;
 
     public void SetBuffer(uint bufferID) => AL.Sourcei(ID, AL.AL_BUFFER, (int)bufferID);
     public void SetGain(float gain) => AL.Sourcef(ID, AL.AL_GAIN, gain);    
