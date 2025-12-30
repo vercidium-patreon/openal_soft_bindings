@@ -1,5 +1,4 @@
-﻿
-namespace OpenAL.managed;
+﻿namespace OpenAL.managed;
 
 public unsafe class ALSource
 {

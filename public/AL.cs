@@ -92,6 +92,7 @@ public static unsafe partial class AL
     public static void Sourcefv(uint source, int param, ReadOnlySpan<float> values) => alSourcefv(source, param, values);
     
     public static void Sourcei(uint source, int param, int value) => alSourcei(source, param, value);
+    public static void Sourcei(uint source, int param, bool value) => alSourcei(source, param, value ? 1 : 0);
     
     public static void Source3i(uint source, int param, int value1, int value2, int value3) => alSource3i(source, param, value1, value2, value3);
     
@@ -125,6 +126,7 @@ public static unsafe partial class AL
     
     public static void SourcePause(uint source) => alSourcePause(source);
     
+    public static void SourcePlayv(int amount, uint[] sources) => alSourcePlayv(amount, sources);
     public static void SourcePlayv(ReadOnlySpan<uint> sources) => alSourcePlayv(sources.Length, sources);
     
     public static void SourceStopv(ReadOnlySpan<uint> sources) => alSourceStopv(sources.Length, sources);
@@ -153,7 +155,8 @@ public static unsafe partial class AL
     public static void BufferData(uint buffer, int format, nint data, int size, int samplerate) => alBufferDataPtr(buffer, format, data, size, samplerate);
     
     public static void BufferData(uint buffer, int format, ReadOnlySpan<byte> data, int size, int samplerate) => alBufferData(buffer, format, data, size, samplerate);
-    
+    public static void BufferData(uint buffer, int format, ReadOnlySpan<short> data, int size, int samplerate) => alBufferData(buffer, format, MemoryMarshal.AsBytes<short>(data), size, samplerate);
+
     public static void Bufferf(uint buffer, int param, float value) => alBufferf(buffer, param, value);
     
     public static void Buffer3f(uint buffer, int param, float value1, float value2, float value3) => alBuffer3f(buffer, param, value1, value2, value3);

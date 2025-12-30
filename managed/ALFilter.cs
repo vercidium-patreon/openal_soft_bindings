@@ -3,23 +3,23 @@
 public class ALFilter
 {
     public uint ID;
-    public float gainLF;
+    public float gain;
     public float gainHF;
 
-    public ALFilter(float gainLF, float gainHF)
+    public ALFilter(float gain, float gainHF)
     {
         ID = AL.GenFilter();
         AL.Filteri(ID, AL.AL_FILTER_TYPE, AL.AL_FILTER_LOWPASS);
 
-        SetGain(gainLF, gainHF);
+        SetGain(gain, gainHF);
     }
 
-    public void SetGain(float gainLF, float gainHF)
+    public void SetGain(float gain, float gainHF)
     {
-        this.gainLF = gainLF;
-        this.gainHF = MathF.Min(1, gainHF / MathF.Max(0.01f, gainLF)); // gainHF is relative to gain
+        this.gain = gain;
+        this.gainHF = MathF.Min(1, gainHF / MathF.Max(0.01f, gain)); // gainHF is relative to gain
 
-        AL.Filterf(ID, AL.AL_LOWPASS_GAIN, gainLF);
+        AL.Filterf(ID, AL.AL_LOWPASS_GAIN, gain);
         AL.Filterf(ID, AL.AL_LOWPASS_GAINHF, gainHF);
     }
 

@@ -18,8 +18,8 @@ partial class Program
         {
             { "https://raw.githubusercontent.com/kcat/openal-soft/master/include/AL/al.h", (@"..\public\ALConstants.cs", @"..\internal\ALBindings.cs", @"..\public\AL.cs", "AL", true) },
             { "https://raw.githubusercontent.com/kcat/openal-soft/master/include/AL/alc.h", (@"..\public\ALCConstants.cs", @"..\internal\ALCBindings.cs", @"..\public\ALC.cs", "AL", false) },
-            { "https://raw.githubusercontent.com/kcat/openal-soft/master/include/AL/alext.h", (@"..\public\ALEXTConstants.cs", @"..\internal\ALEXTBindings.cs", @"..\public\ALEXT.cs", "AL", false) },
-            { "https://raw.githubusercontent.com/kcat/openal-soft/master/include/AL/efx.h", (@"..\public\EFXConstants.cs", @"..\internal\EFXBindings.cs", @"..\public\EFX.cs", "AL", false) }
+            { "https://raw.githubusercontent.com/kcat/openal-soft/master/include/AL/AL.h", (@"..\public\ALEXTConstants.cs", @"..\internal\ALEXTBindings.cs", @"..\public\AL.cs", "AL", false) },
+            { "https://raw.githubusercontent.com/kcat/openal-soft/master/include/AL/AL.h", (@"..\public\EFXConstants.cs", @"..\internal\EFXBindings.cs", @"..\public\AL.cs", "AL", false) }
         };
 
         foreach (var header in headerFiles)

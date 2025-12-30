@@ -3,5 +3,38 @@
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>OpenAL</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>  
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Title>OpenAL Soft Bindings</Title>
+        <Company>Vercidium Pty Ltd</Company>
+        <Description>Modern, high-performance C# bindings for OpenAL Soft, with managed wrappers for ease of use.</Description>
+        <Copyright>Copyright © 2026 Vercidium</Copyright>
+        <PackageProjectUrl>https://github.com/vercidium-patreon/openal_soft_bindings</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/vercidium-patreon/openal_soft_bindings</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>openal;openal-soft;openal_soft;</PackageTags>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    </PropertyGroup>
+
+	<PropertyGroup>
+		<Version>1.0.1</Version>
+		<PackageReleaseNotes>
+Renamed the ALFilter.gainLF field to ALFilter.gain, to correctly match the underlying OpenAL filter property.
+		</PackageReleaseNotes>
+	</PropertyGroup>
+
+    <ItemGroup>
+      <None Update="LICENSE.txt">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+      <None Update="CHANGELOG.md">
+        <PackagePath>\</PackagePath>
+        <Pack>True</Pack>
+      </None>
+      <None Update="README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>  
 </Project>

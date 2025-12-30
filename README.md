@@ -124,8 +124,8 @@ Clean C# wrappers for functions and constants:
 
 - `AL.cs` - Core OpenAL
 - `ALC.cs` - Context management
-- `EFX.cs` - Effects and filters
-- `ALEXT.cs` - OpenAL extensions
+- `AL.cs` - Effects and filters
+- `AL.cs` - OpenAL extensions
 - `*Constants.cs` - OpenAL constants
 
 ### Managed Wrappers (`managed/`)
