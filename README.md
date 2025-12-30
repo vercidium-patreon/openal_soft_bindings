@@ -2,6 +2,8 @@
 
 Modern, high-performance C# bindings for OpenAL Soft, with managed wrappers for ease of use.
 
+[Available as a NuGet package here](https://libraries.io/nuget/openal_soft_bindings).
+
 ## Features
 
 - **Modern C# Interop**: Uses `LibraryImport` and `Span<T>` for optimal performance
