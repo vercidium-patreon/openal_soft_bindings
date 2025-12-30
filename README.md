@@ -2,7 +2,7 @@
 
 Modern, high-performance C# bindings for OpenAL Soft, with managed wrappers for ease of use.
 
-[Available as a NuGet package here](https://libraries.io/nuget/openal_soft_bindings).
+[Available as a NuGet package here](https://www.nuget.org/packages/openal_soft_bindings).
 
 ## Features
 
