@@ -17,9 +17,9 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<PackageReleaseNotes>
-ALCaptureDevice now supports all sound formats. Removed the InputThreshold property from ALCaptureDevice. Created a new ReverbPreset class that holds EAX parameters and many default EAX presets.
+Created a new ALStreamSource class for streaming data to an OpenAL source (e.g. microphone input)
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

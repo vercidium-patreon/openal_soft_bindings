@@ -1,3 +1,6 @@
+# Version 1.0.3
+Created a new ALStreamSource class for streaming data to an OpenAL source (e.g. microphone input)
+
 # Version 1.0.2
 ALCaptureDevice now supports all sound formats.
 Removed the InputThreshold property from ALCaptureDevice.

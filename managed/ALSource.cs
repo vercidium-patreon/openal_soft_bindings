@@ -59,7 +59,7 @@ public unsafe class ALSource
         AL.Source3i(ID, AL.AL_AUXILIARY_SEND_FILTER, effectSlotID, 0, reverbFilterID);
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         // Ensure we're not double-disposing
         Debug.Assert(!IsDisposed());
