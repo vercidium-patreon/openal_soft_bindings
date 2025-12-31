@@ -17,9 +17,9 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<PackageReleaseNotes>
-Renamed the ALFilter.gainLF field to ALFilter.gain, to correctly match the underlying OpenAL filter property.
+ALCaptureDevice now supports all sound formats. Removed the InputThreshold property from ALCaptureDevice. Created a new ReverbPreset class that holds EAX parameters and many default EAX presets.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

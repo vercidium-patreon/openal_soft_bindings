@@ -15,6 +15,33 @@ public class ALReverbEffect
         AL.AuxiliaryEffectSloti(effectSlotID, AL.AL_EFFECTSLOT_EFFECT, (int)effectID);
     }
 
+    public void CopyFromPreset(ReverbPreset preset)
+    {
+        density = preset.density;
+        diffusion = preset.diffusion;
+        gain = preset.gain;
+        gainHF = preset.gainHF;
+        gainLF = preset.gainLF;
+        decayTime = preset.decayTime;
+        decayHFRatio = preset.decayHFRatio;
+        decayLFRatio = preset.decayLFRatio;
+        reflectionsGain = preset.reflectionsGain;
+        reflectionsDelay = preset.reflectionsDelay;
+        reflectionsPan = preset.reflectionsPan;
+        lateReverbGain = preset.lateReverbGain;
+        lateReverbDelay = preset.lateReverbDelay;
+        lateReverbPan = preset.lateReverbPan;
+        echoTime = preset.echoTime;
+        echoDepth = preset.echoDepth;
+        modulationTime = preset.modulationTime;
+        modulationDepth = preset.modulationDepth;
+        airAbsorptionGainHF = preset.airAbsorptionGainHF;
+        hfReference = preset.hfReference;
+        lfReference = preset.lfReference;
+        roomRolloffFactor = preset.roomRolloffFactor;
+        decayHFLimit = preset.decayHFLimit;
+    }
+
     public void Update()
     {
         // If we're changing audio devices, we'll be null for a split second
@@ -43,8 +70,8 @@ public class ALReverbEffect
         AL.Effectf(effectID, AL.AL_EAXREVERB_ECHO_DEPTH, echoDepth);
         AL.Effectf(effectID, AL.AL_EAXREVERB_MODULATION_DEPTH, modulationDepth);
         AL.Effectf(effectID, AL.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, airAbsorptionGainHF);
-        AL.Effectf(effectID, AL.AL_EAXREVERB_HFREFERENCE, hFReference);
-        AL.Effectf(effectID, AL.AL_EAXREVERB_LFREFERENCE, lFReference);
+        AL.Effectf(effectID, AL.AL_EAXREVERB_HFREFERENCE, hfReference);
+        AL.Effectf(effectID, AL.AL_EAXREVERB_LFREFERENCE, lfReference);
         AL.Effectf(effectID, AL.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, roomRolloffFactor);
         AL.Effecti(effectID, AL.AL_EAXREVERB_DECAY_HFLIMIT, decayHFLimit);
 
@@ -90,8 +117,8 @@ public class ALReverbEffect
     public float modulationTime;
     public float modulationDepth;
     public float airAbsorptionGainHF;
-    public float hFReference;
-    public float lFReference;
+    public float hfReference;
+    public float lfReference;
     public float roomRolloffFactor;
     public int decayHFLimit;
 }

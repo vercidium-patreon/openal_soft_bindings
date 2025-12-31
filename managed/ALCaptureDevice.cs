@@ -4,11 +4,12 @@ public unsafe class ALCaptureDevice
 {
     IntPtr handle;
     readonly Action<string> Log;
+    readonly int Format;
     readonly int BufferSize;
-    readonly int InputThreshold;
     readonly Action<nint, int> DataCallback;
 
-    short* sampleBuffer;
+    void* sampleBuffer;
+    int bytesPerFrame;
 
     public ALCaptureDevice(ALCaptureDeviceSettings settings)
     {
@@ -17,16 +18,17 @@ public unsafe class ALCaptureDevice
 
         Log = settings.LogCallback ?? Console.WriteLine;
 
+        this.Format = settings.Format;
         this.BufferSize = settings.BufferSize;
-        this.InputThreshold = settings.InputThreshold;
         this.DataCallback = settings.DataCallback;
 
-        handle = AL.CaptureOpenDevice(settings.DeviceName, (uint)settings.SampleRate, settings.Format, BufferSize);
+        handle = AL.CaptureOpenDevice(settings.DeviceName, (uint)settings.SampleRate, Format, settings.BufferSize);
 
         if (handle == IntPtr.Zero)
             throw new Exception($"[OpenAL] Failed to open the input device: {settings.DeviceName}");
 
-        sampleBuffer = (short*)NativeMemory.Alloc((nuint)(BufferSize * sizeof(short)));
+        bytesPerFrame = AL.GetBytesPerFrame(Format);
+        sampleBuffer = NativeMemory.Alloc((nuint)(BufferSize * bytesPerFrame));
     }
 
     public void CaptureStart()
@@ -41,31 +43,17 @@ public unsafe class ALCaptureDevice
 
     public void Update()
     {
+        // OpenAL calls this 'samples' but it's actually frames
         var sampleCount = AL.GetIntegerALC(handle, AL.ALC_CAPTURE_SAMPLES);
 
-        Debug.Assert(sampleCount <= BufferSize);
-
-        // Sometimes there's no samples. Not sure why. It seems to only be on the first time this function runs
+        // Ignore empty captures
         if (sampleCount == 0)
             return;
 
+        // If there are 5000 samples available but bufferSize is only 1000, only read 1000 samples
+        sampleCount = Math.Min(sampleCount, BufferSize);
+
         AL.CaptureSamples(handle, (nint)sampleBuffer, sampleCount);
-
-        if (InputThreshold > 0)
-        {
-            int total = 0;
-            var read = sampleBuffer;
-            var end = sampleBuffer + sampleCount;
-
-            while (read < end)
-            {
-                total += Math.Abs((int)(*read++));
-            }
-
-            // If silent (e.g. microphone is off)
-            if (total < sampleCount * InputThreshold)
-                return;
-        }
 
         DataCallback((nint)sampleBuffer, sampleCount);
     }
@@ -87,7 +75,6 @@ public class ALCaptureDeviceSettings
     public int SampleRate = 44100;
     public int Format = AL.AL_FORMAT_MONO16;
     public int BufferSize = 1024;
-    public int InputThreshold = 600;
     public Action<string> LogCallback;
     public Action<nint, int> DataCallback;
 }
