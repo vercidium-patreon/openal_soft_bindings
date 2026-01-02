@@ -1,4 +1,6 @@
-﻿namespace OpenAL.managed;
+﻿using System;
+
+namespace OpenAL.managed;
 
 public class ALDevice
 {
@@ -36,12 +38,15 @@ public class ALDevice
     /// Reopen this device as a new device name. Requires the ALC_SOFT_reopen_device extension
     /// </summary>
     /// <param name="deviceName">The name of the device</param>
+    /// <param name="attribs">Attribute list to configure the device with, with the same attribute list that would be passed to alcCreateContext</param>
     /// <returns>True if the device was re-opened</returns>
-    public bool Reopen(string deviceName)
+    public bool Reopen(string deviceName, int[] attribs)
     {
+        // Must have an existing context too
         Debug.Assert(AL.GetCurrentContext() != IntPtr.Zero);
+
         reopenDevice ??= new(handle);
-        return reopenDevice.Invoke(handle, deviceName, IntPtr.Zero);
+        return reopenDevice.Invoke(handle, deviceName, attribs);
     }
 
     /// <summary>

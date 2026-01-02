@@ -25,8 +25,24 @@ public class ALContext
 
         Log = settings.LogFunction ?? Console.WriteLine;
 
+        var attribs = GetAttribs(settings);
+
+        // Initialise the context
+        handle = AL.CreateContext(device.handle, attribs);
+
+        if (handle == IntPtr.Zero)
+            throw new Exception($"[OpenAL] Failed to create a context");
+
+        MakeCurrent();
+
+        AL.Enable(AL.AL_DEBUG_OUTPUT_EXT);
+        device.SetupDebugMessageCallback(OpenALDebugCallback, IntPtr.Zero);
+    }
+
+    public int[] GetAttribs(ALContextSettings settings)
+    {
         List<int> attribs =
-        [        
+        [
             AL.ALC_FREQUENCY,
             settings.SampleRate,
             AL.ALC_MAX_AUXILIARY_SENDS,
@@ -56,20 +72,9 @@ public class ALContext
         attribs.Add(0);
         attribs.Add(0);
 
-        var attribsArray = attribs.ToArray();
-
-
-        // Initialise the context
-        handle = AL.CreateContext(device.handle, attribsArray);
-
-        if (handle == IntPtr.Zero)
-            throw new Exception($"[OpenAL] Failed to create a context");
-
-        MakeCurrent();
-
-        AL.Enable(AL.AL_DEBUG_OUTPUT_EXT);
-        device.SetupDebugMessageCallback(OpenALDebugCallback, IntPtr.Zero);
+        return attribs.ToArray();
     }
+
 
     private delegate void AlDebugMessageCallbackFunc(AL.ALDebugProc callback, IntPtr userParam);
 
