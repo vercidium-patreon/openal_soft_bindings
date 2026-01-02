@@ -1,10 +1,23 @@
 ﻿namespace OpenAL.managed;
 
+public class ALContextSettings
+{
+    public bool HRTFEnabled = true;
+    public int HRTFID = 0;
+    public int SampleRate = 44100;
+    public int MaximumAuxiliarySends = 1;
+    public int MaximumMonoSources = 16;
+    public int MaximumStereoSources = 240;
+    public Action<string> LogFunction;
+}
+
 public class ALContext
 {
     public readonly ALDevice device;
     public readonly IntPtr handle;
     readonly Action<string> Log;
+
+    const string HRTF_EXTENSION = "ALC_SOFT_HRTF";
 
     public ALContext(ALDevice device, ALContextSettings settings)
     {
@@ -24,21 +37,21 @@ public class ALContext
             settings.MaximumStereoSources
         ];
 
-        var extensionPresent = AL.IsExtensionPresent(device.handle, "ALC_SOFT_HRTF");
-        var value = extensionPresent ? 1 : 0;
+        // Attempt to enable HRTF
+        var hasHrtfExtension = device.HasExtension(HRTF_EXTENSION);
 
         // Enable HRTF
         attribs.Add(AL.ALC_HRTF_SOFT);
-        attribs.Add(value);
+        attribs.Add(hasHrtfExtension ? 1 : 0);
 
-        if (extensionPresent)
+        if (hasHrtfExtension)
         {
             // Use the default HRTF specifier (0)
             attribs.Add(AL.ALC_HRTF_ID_SOFT);
             attribs.Add(settings.HRTFID);
         }
         else
-            Log("[OpenAL] Unable to enable HRTF as the ALC_SOFT_HRTF extension is missing.");
+            Log($"[OpenAL] Unable to enable HRTF as the {HRTF_EXTENSION} extension is missing");
 
         attribs.Add(0);
         attribs.Add(0);
@@ -50,14 +63,12 @@ public class ALContext
         handle = AL.CreateContext(device.handle, attribsArray);
 
         if (handle == IntPtr.Zero)
-        {
             throw new Exception($"[OpenAL] Failed to create a context");
-        }
 
         MakeCurrent();
 
         AL.Enable(AL.AL_DEBUG_OUTPUT_EXT);
-        device.DebugMessageCallback(OpenALDebugCallback, IntPtr.Zero);
+        device.SetupDebugMessageCallback(OpenALDebugCallback, IntPtr.Zero);
     }
 
     private delegate void AlDebugMessageCallbackFunc(AL.ALDebugProc callback, IntPtr userParam);
@@ -65,7 +76,7 @@ public class ALContext
     public void MakeCurrent()
     {
         if (!AL.MakeContextCurrent(handle))
-            throw new Exception($"[OpenAL] Failed to activate the context");
+            throw new Exception("[OpenAL] Failed to make the context current");
 
         Debug.Assert(IsCurrent);
     }
@@ -73,7 +84,7 @@ public class ALContext
     public void Process() => AL.ProcessContext(handle);
     public void Destroy()
     {
-        device.DebugMessageCallback(null, IntPtr.Zero);
+        device.SetupDebugMessageCallback(null, IntPtr.Zero);
         AL.DestroyContext(handle);
     }
 
@@ -119,18 +130,6 @@ public class ALContext
             _ => severity.ToString()
         };
 
-        Debug.Assert(false);
         Log($"OpenAL [{severityStr}] {sourceStr}/{typeStr}: {message}");
     }
-}
-
-public class ALContextSettings
-{
-    public bool HRTFEnabled = true;
-    public int HRTFID = 0;
-    public int SampleRate = 44100;
-    public int MaximumAuxiliarySends = 1;
-    public int MaximumMonoSources = 16;
-    public int MaximumStereoSources = 240;
-    public Action<string> LogFunction;
 }

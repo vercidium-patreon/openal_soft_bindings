@@ -4,6 +4,9 @@ public class ALDevice
 {
     public readonly IntPtr handle;
 
+    DebugMessageCallback debugMessageCallback;
+    ReopenDeviceSoft reopenDevice;
+
     public ALDevice(string deviceName)
     {
         handle = AL.OpenDevice(deviceName);
@@ -20,22 +23,32 @@ public class ALDevice
     public int GetIntegerALC(int param) => AL.GetIntegerALC(handle, param);
     public int GetErrorALC() => AL.GetError(handle);
 
-    DebugMessageCallback debugMessageCallback;
-    ReopenDeviceSoft reopenDevice;
-
-    public void DebugMessageCallback(AL.ALDebugProc callback, IntPtr userParam)
+    // TODO - should this live on the device or the context?
+    public void SetupDebugMessageCallback(AL.ALDebugProc callback, IntPtr userParam)
     {
-        // These delegates are created here rather than in the constructor, because the AL context must also be created first
+        // These delegates are created here rather than in the constructor, because the AL context must be created first
         Debug.Assert(AL.GetCurrentContext() != IntPtr.Zero);
         debugMessageCallback ??= new(handle);
         debugMessageCallback.Invoke(callback, userParam);
     }
 
+    /// <summary>
+    /// Reopen this device as a new device name. Requires the ALC_SOFT_reopen_device extension
+    /// </summary>
+    /// <param name="deviceName">The name of the device</param>
+    /// <returns>True if the device was re-opened</returns>
     public bool Reopen(string deviceName)
     {
         Debug.Assert(AL.GetCurrentContext() != IntPtr.Zero);
         reopenDevice ??= new(handle);
         return reopenDevice.Invoke(handle, deviceName, IntPtr.Zero);
     }
+
+    /// <summary>
+    /// Check if an extension is present
+    /// </summary>
+    /// <param name="extension">The AL extension specifier</param>
+    /// <returns>True if the extension is present</returns>
+    public bool HasExtension(string extension) => AL.IsExtensionPresent(handle, extension);
 }
 

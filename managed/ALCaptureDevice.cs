@@ -1,5 +1,15 @@
 ﻿namespace OpenAL.managed;
 
+public class ALCaptureDeviceSettings
+{
+    public string DeviceName;
+    public int SampleRate = 44100;
+    public int Format = AL.AL_FORMAT_MONO16;
+    public int BufferSize = 1024;
+    public Action<string> LogCallback;
+    public Action<nint, int> DataCallback;
+}
+
 public unsafe class ALCaptureDevice
 {
     IntPtr handle;
@@ -67,14 +77,4 @@ public unsafe class ALCaptureDevice
         NativeMemory.Free(sampleBuffer);
         sampleBuffer = null;
     }
-}
-
-public class ALCaptureDeviceSettings
-{
-    public string DeviceName;
-    public int SampleRate = 44100;
-    public int Format = AL.AL_FORMAT_MONO16;
-    public int BufferSize = 1024;
-    public Action<string> LogCallback;
-    public Action<nint, int> DataCallback;
 }
