@@ -67,24 +67,36 @@ public unsafe class ALCaptureDevice
     /// <summary>
     /// Start capturing audio
     /// </summary>
+    /// <exception cref="Exception">Thrown if the device has been closed</exception>
     public void CaptureStart()
     {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] Cannot start capture on a closed device");
+
         AL.CaptureStart(handle);
     }
 
     /// <summary>
     /// Stop capturing audio
     /// </summary>
+    /// <exception cref="Exception">Thrown if the device has been closed</exception>
     public void CaptureStop()
     {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] Cannot stop capture on a closed device");
+
         AL.CaptureStop(handle);
     }
 
     /// <summary>
     /// Poll for captured audio samples. Invokes DataCallback with audio samples
     /// </summary>
+    /// <exception cref="Exception">Thrown if the device has been closed</exception>
     public void Update()
     {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] Cannot update a closed capture device");
+
         // OpenAL calls this 'samples' but it's actually frames
         var sampleCount = AL.GetIntegerALC(handle, AL.ALC_CAPTURE_SAMPLES);
 
@@ -103,8 +115,12 @@ public unsafe class ALCaptureDevice
     /// <summary>
     /// Close the capture device and free resources
     /// </summary>
+    /// <exception cref="Exception">Thrown if the device has already been closed</exception>
     public void Close()
     {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] Capture device has already been closed");
+
         CaptureStop();
 
         AL.CaptureCloseDevice(handle);
