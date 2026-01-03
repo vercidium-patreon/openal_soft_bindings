@@ -54,7 +54,7 @@ public class ALContext
     /// <summary>
     /// The native context handle
     /// </summary>
-    public readonly IntPtr handle;
+    public IntPtr handle;
 
     readonly Action<string> Log;
 
@@ -83,6 +83,7 @@ public class ALContext
         MakeCurrent();
 
         // Set up a debug callback for this context
+        AL.Enable(AL.AL_DEBUG_OUTPUT_EXT);
         DebugMessageCallback.Invoke(OpenALDebugCallback, IntPtr.Zero);
     }
 
@@ -153,8 +154,12 @@ public class ALContext
     public void Destroy()
     {
         MakeCurrent();
+        
+        AL.Disable(AL.AL_DEBUG_OUTPUT_EXT);
         DebugMessageCallback.Invoke(null, IntPtr.Zero);
+
         AL.DestroyContext(handle);
+        handle = IntPtr.Zero;
     }
 
     /// <summary>
@@ -208,4 +213,11 @@ public class ALContext
 
         Log($"OpenAL [{severityStr}] {sourceStr}/{typeStr}: {message}");
     }
+
+#if DEBUG
+    ~ALContext()
+    {
+        Debug.Assert(handle == IntPtr.Zero);
+    }
+#endif
 }

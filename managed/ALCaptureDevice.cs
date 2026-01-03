@@ -108,9 +108,16 @@ public unsafe class ALCaptureDevice
         CaptureStop();
 
         AL.CaptureCloseDevice(handle);
-        handle = 0;
+        handle = IntPtr.Zero;
 
         NativeMemory.Free(sampleBuffer);
         sampleBuffer = null;
     }
+
+#if DEBUG
+    ~ALCaptureDevice()
+    {
+        Debug.Assert(handle == IntPtr.Zero);
+    }
+#endif
 }

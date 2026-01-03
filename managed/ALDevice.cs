@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OpenAL.managed;
+﻿namespace OpenAL.managed;
 
 /// <summary>
 /// Represents an OpenAL audio output device
@@ -10,9 +8,7 @@ public class ALDevice
     /// <summary>
     /// The native device handle
     /// </summary>
-    public readonly IntPtr handle;
-
-    ReopenDeviceSoft reopenDevice;
+    public IntPtr handle;
 
     /// <summary>
     /// Opens an audio device by name
@@ -30,7 +26,11 @@ public class ALDevice
     /// <summary>
     /// Closes the device
     /// </summary>
-    public void Close() => AL.CloseDevice(handle);
+    public void Close()
+    {
+        AL.CloseDevice(handle);
+        handle = IntPtr.Zero;
+    }
 
     /// <summary>
     /// Gets a raw string pointer for a device parameter
@@ -79,5 +79,12 @@ public class ALDevice
     /// <param name="extension">The AL extension specifier</param>
     /// <returns>True if the extension is present</returns>
     public bool HasExtension(string extension) => AL.IsExtensionPresent(handle, extension);
+
+#if DEBUG
+    ~ALDevice()
+    {
+        Debug.Assert(handle == IntPtr.Zero);
+    }
+#endif
 }
 

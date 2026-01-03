@@ -183,7 +183,7 @@ public class ReverbPreset
     public int decayHFLimit;
 
     /// <summary>
-    /// Creates a new reverb preset with all parameters
+    /// Create a new reverb preset with all parameters
     /// </summary>
     public ReverbPreset(string name, float density, float diffusion, float gain, float gainHF, float gainLF, float decayTime, float decayHFRatio, float decayLFRatio,
                         float reflectionsGain, float reflectionsDelay, float[] reflectionsPan, float lateReverbGain, float lateReverbDelay, float[] lateReverbPan,

@@ -6,25 +6,25 @@
 public class ALFilter
 {
     /// <summary>
-    /// The OpenAL filter ID
+    /// OpenAL filter ID
     /// </summary>
     public uint ID;
 
     /// <summary>
-    /// The overall gain applied by the filter
+    /// Overall gain applied by the filter
     /// </summary>
     public float gain;
 
     /// <summary>
-    /// The high-frequency gain attenuation
+    /// High-frequency gain multiplier
     /// </summary>
     public float gainHF;
 
     /// <summary>
-    /// Creates a new lowpass filter with the specified gain parameters
+    /// Create a new lowpass filter
     /// </summary>
     /// <param name="gain">The overall gain</param>
-    /// <param name="gainHF">The high-frequency gain attenuation</param>
+    /// <param name="gainHF">The high-frequency gain</param>
     public ALFilter(float gain, float gainHF)
     {
         ID = AL.GenFilter();
@@ -34,10 +34,10 @@ public class ALFilter
     }
 
     /// <summary>
-    /// Updates the filter's gain parameters
+    /// Update the filter's gain parameters
     /// </summary>
     /// <param name="gain">The overall gain</param>
-    /// <param name="gainHF">The high-frequency gain attenuation</param>
+    /// <param name="gainHF">The high-frequency gain</param>
     public void SetGain(float gain, float gainHF)
     {
         this.gain = gain;
@@ -48,7 +48,7 @@ public class ALFilter
     }
 
     /// <summary>
-    /// Deletes the filter and releases its resources
+    /// Delete the filter and release its resources
     /// </summary>
     public void Delete()
     {
@@ -57,7 +57,6 @@ public class ALFilter
     }
 
 #if DEBUG
-    // Ensure we're disposed correctly
     ~ALFilter()
     {
         Debug.Assert(ID == 0);

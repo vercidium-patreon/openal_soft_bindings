@@ -6,7 +6,7 @@
 public class ALReverbEffect
 {
     /// <summary>
-    /// Creates a new reverb effect with an effect slot
+    /// Create a new reverb effect with an effect slot
     /// </summary>
     public ALReverbEffect()
     {
@@ -22,7 +22,7 @@ public class ALReverbEffect
     }
 
     /// <summary>
-    /// Copies all reverb parameters from a preset
+    /// Copy all reverb parameters from a preset
     /// </summary>
     /// <param name="preset">The reverb preset to copy from</param>
     public void CopyFromPreset(ReverbPreset preset)
@@ -53,7 +53,7 @@ public class ALReverbEffect
     }
 
     /// <summary>
-    /// Applies pending reverb parameter changes to the effect
+    /// Apply pending reverb parameter changes to the effect
     /// </summary>
     public void Update()
     {
@@ -67,7 +67,7 @@ public class ALReverbEffect
         AL.Effecti(effectID, AL.AL_EFFECT_TYPE, AL.AL_EFFECT_EAXREVERB);
         AL.Effectf(effectID, AL.AL_EAXREVERB_DENSITY, density);
         AL.Effectf(effectID, AL.AL_EAXREVERB_DIFFUSION, diffusion);
-        AL.Effectf(effectID, AL.AL_EAXREVERB_GAIN, Math.Min(1, gain)); // Sometimes it's above 1
+        AL.Effectf(effectID, AL.AL_EAXREVERB_GAIN, gain);
         AL.Effectf(effectID, AL.AL_EAXREVERB_GAINHF, gainHF);
         AL.Effectf(effectID, AL.AL_EAXREVERB_GAINLF, gainLF);
         AL.Effectf(effectID, AL.AL_EAXREVERB_DECAY_TIME, decayTime);
@@ -94,7 +94,7 @@ public class ALReverbEffect
     }
 
     /// <summary>
-    /// Disposes the reverb effect and releases its resources
+    /// Dispose the reverb effect and release its resources
     /// </summary>
     public void Dispose()
     {
@@ -110,12 +110,12 @@ public class ALReverbEffect
     }
 
     /// <summary>
-    /// The OpenAL effect ID
+    /// OpenAL effect ID
     /// </summary>
     public uint effectID;
 
     /// <summary>
-    /// The OpenAL auxiliary effect slot ID
+    /// OpenAL auxiliary effect slot ID
     /// </summary>
     public uint effectSlotID;
 
@@ -126,48 +126,78 @@ public class ALReverbEffect
 
     /// <summary>Modal density of the reverb tail</summary>
     public float density;
+
     /// <summary>Diffusion of sound energy throughout the reverb field</summary>
     public float diffusion;
+
     /// <summary>Master output level for the reverb effect</summary>
     public float gain;
+
     /// <summary>High-frequency damping factor</summary>
     public float gainHF;
+
     /// <summary>Low-frequency gain adjustment</summary>
     public float gainLF;
+
     /// <summary>Reverb decay time in seconds</summary>
     public float decayTime;
+
     /// <summary>High-frequency decay ratio</summary>
     public float decayHFRatio;
+
     /// <summary>Low-frequency decay ratio</summary>
     public float decayLFRatio;
+
     /// <summary>Early reflections gain</summary>
     public float reflectionsGain;
+
     /// <summary>Early reflections delay</summary>
     public float reflectionsDelay;
+
     /// <summary>Early reflections panning vector</summary>
     public float[] reflectionsPan = [0, 0, 0];
+
     /// <summary>Late reverb gain</summary>
     public float lateReverbGain;
+
     /// <summary>Late reverb delay</summary>
     public float lateReverbDelay;
+
     /// <summary>Late reverb panning vector</summary>
     public float[] lateReverbPan = [0, 0, 0];
+
     /// <summary>Echo time</summary>
     public float echoTime;
+
     /// <summary>Echo depth</summary>
     public float echoDepth;
+
     /// <summary>Modulation time</summary>
     public float modulationTime;
+
     /// <summary>Modulation depth</summary>
     public float modulationDepth;
+
     /// <summary>Air absorption gain for high frequencies</summary>
     public float airAbsorptionGainHF;
+
     /// <summary>High-frequency reference</summary>
     public float hfReference;
+
     /// <summary>Low-frequency reference</summary>
     public float lfReference;
+
     /// <summary>Room rolloff factor</summary>
     public float roomRolloffFactor;
+
     /// <summary>High-frequency decay limit flag</summary>
     public int decayHFLimit;
+
+#if DEBUG
+    ~ALReverbEffect()
+    {
+        Debug.Assert(effectID == 0);
+        Debug.Assert(effectSlotID == 0);
+    }
+#endif
 }

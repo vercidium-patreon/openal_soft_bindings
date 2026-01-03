@@ -29,7 +29,7 @@ public unsafe class ALStreamSource : ALSource
     AL.ALBufferCallbackTypeSoft bufferCallback;
 
     /// <summary>
-    /// Creates a new streaming audio source
+    /// Create a new streaming audio source
     /// </summary>
     /// <param name="sourceID">The OpenAL source ID</param>
     /// <param name="inputFormat">The audio format</param>
@@ -59,7 +59,7 @@ public unsafe class ALStreamSource : ALSource
     }
 
     /// <summary>
-    /// Enqueues audio data from a managed byte array for playback.
+    /// Enqueue audio data from a managed byte array for playback.
     /// </summary>
     /// <param name="data">The byte array containing the audio data</param>
     /// <param name="offset">The offset within the array to start reading from</param>
@@ -77,7 +77,7 @@ public unsafe class ALStreamSource : ALSource
     }
 
     /// <summary>
-    /// Enqueues audio data from an unmanaged byte pointer for playback.
+    /// Enqueue audio data from an unmanaged byte pointer for playback.
     /// </summary>
     /// <param name="data">Pointer to the audio data buffer</param>
     /// <param name="offset">The offset within the buffer to start reading from</param>
@@ -95,7 +95,7 @@ public unsafe class ALStreamSource : ALSource
     }
 
     /// <summary>
-    /// Attempts to retrieve a buffer that has been fully consumed by OpenAL and can be freed or recycled.
+    /// Attempt to retrieve a buffer that has been fully consumed by OpenAL and can be freed or recycled.
     /// Keep calling this until it returns false to retrieve all used buffers.
     /// </summary>
     /// <param name="buffer">The consumed buffer that can be freed or recycled</param>

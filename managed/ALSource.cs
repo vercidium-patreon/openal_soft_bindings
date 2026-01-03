@@ -6,12 +6,12 @@
 public unsafe class ALSource
 {
     /// <summary>
-    /// The OpenAL source ID
+    /// OpenAL source ID
     /// </summary>
     public uint ID;
 
     /// <summary>
-    /// Creates a new audio source wrapper
+    /// Create a new audio source wrapper
     /// </summary>
     /// <param name="ID">The OpenAL source ID</param>
     public ALSource(uint ID)
@@ -20,45 +20,47 @@ public unsafe class ALSource
         this.ID = ID;
     }
 
-    /// <summary>Starts playing the source</summary>
+    /// <summary>Start playing the source</summary>
     public void Play() => AL.SourcePlay(ID);
-    /// <summary>Stops playing the source</summary>
+
+    /// <summary>Stop playing the source</summary>
     public void Stop() => AL.SourceStop(ID);
 
-    /// <summary>Checks if the source has finished playing</summary>
+    /// <summary>Check if the source has finished playing</summary>
     public bool Finished() => !looping && AL.GetSourcei(ID, AL.AL_SOURCE_STATE) == AL.AL_STOPPED;
 
-    /// <summary>Sets the audio buffer to play</summary>
+    /// <summary>Set the audio buffer to play</summary>
     public void SetBuffer(uint bufferID) => AL.Sourcei(ID, AL.AL_BUFFER, (int)bufferID);
-    /// <summary>Sets the source gain (volume)</summary>
+    /// <summary>Set the source gain (volume)</summary>
     public void SetGain(float gain) => AL.Sourcef(ID, AL.AL_GAIN, gain);
-    /// <summary>Sets the source pitch multiplier</summary>
+    /// <summary>Set the source pitch multiplier</summary>
     public void SetPitch(float pitch) => AL.Sourcef(ID, AL.AL_PITCH, pitch);
-    /// <summary>Sets whether the source is relative to the listener</summary>
+    /// <summary>Set whether the source is relative to the listener</summary>
     public void SetRelative(bool v) => AL.Sourcei(ID, AL.AL_SOURCE_RELATIVE, v ? 1 : 0);
-    /// <summary>Sets whether the source should be spatialized</summary>
+    /// <summary>Set whether the source should be spatialized</summary>
     public void SetSpatialise(bool v) => AL.Sourcei(ID, AL.AL_SOURCE_SPATIALIZE_SOFT, v ? 1 : 0);
-    /// <summary>Sets the reference distance for attenuation</summary>
+    /// <summary>Set the reference distance for attenuation</summary>
     public void SetReferenceDistance(float v) => AL.Sourcef(ID, AL.AL_REFERENCE_DISTANCE, v);
-    /// <summary>Sets the maximum distance for attenuation</summary>
+    /// <summary>Set the maximum distance for attenuation</summary>
     public void SetMaxDistance(float v) => AL.Sourcef(ID, AL.AL_MAX_DISTANCE, v);
-    /// <summary>Sets the air absorption factor</summary>
+    /// <summary>Set the air absorption factor</summary>
     public void SetAirAbsorptionFactor(float v) => AL.Sourcef(ID, AL.AL_AIR_ABSORPTION_FACTOR, v);
-    /// <summary>Sets the rolloff factor for distance attenuation</summary>
+    /// <summary>Set the rolloff factor for distance attenuation</summary>
     public void SetRolloff(float v) => AL.Sourcef(ID, AL.AL_ROLLOFF_FACTOR, v);
 
-    /// <summary>Sets the 3D position of the source</summary>
+    /// <summary>Set the 3D position of the source</summary>
     public void SetPosition(ReadOnlySpan<float> v) => AL.Sourcefv(ID, AL.AL_POSITION, v);
-    /// <summary>Sets the velocity vector for doppler effect</summary>
+    /// <summary>Set the velocity vector for doppler effect</summary>
     public void SetVelocity(ReadOnlySpan<float> v) => AL.Sourcefv(ID, AL.AL_VELOCITY, v);
-    /// <summary>Sets the direction vector for directional sources</summary>
+    /// <summary>Set the direction vector for directional sources</summary>
     public void SetDirection(ReadOnlySpan<float> v) => AL.Sourcefv(ID, AL.AL_DIRECTION, v);
-    /// <summary>Sets a 3D vector parameter</summary>
+    /// <summary>Set a 3D vector parameter</summary>
     public void SetVector3(int param, ReadOnlySpan<float> v) => AL.Sourcefv(ID, param, v);
 
     /// <summary>Whether this source is looping</summary>
     public bool looping;
-    /// <summary>Sets whether the source should loop</summary>
+
+    /// <summary>Set whether the source should loop</summary>
     public void SetLooping(bool v)
     {
         looping = v;
@@ -67,7 +69,7 @@ public unsafe class ALSource
 
     /// <summary>Current playback offset in seconds</summary>
     public float secOffset;
-    /// <summary>Sets the playback position in seconds</summary>
+    /// <summary>Set the playback position in seconds</summary>
     public void SetSecOffset(float seconds)
     {
         secOffset = seconds;
@@ -75,7 +77,7 @@ public unsafe class ALSource
     }
 
     /// <summary>
-    /// Applies reverb and filter effects to the source
+    /// Apply reverb and filter effects to the source
     /// </summary>
     /// <param name="reverbEffect">The reverb effect to apply</param>
     /// <param name="directFilter">Filter for the direct (dry) signal</param>
@@ -96,7 +98,7 @@ public unsafe class ALSource
     }
 
     /// <summary>
-    /// Disposes the source and releases its resources
+    /// Dispose the source and releases its resources
     /// </summary>
     public virtual void Dispose()
     {
@@ -108,7 +110,14 @@ public unsafe class ALSource
     }
 
     /// <summary>
-    /// Checks if the source has been disposed
+    /// Check if the source has been disposed
     /// </summary>
     public bool IsDisposed() => ID == 0;
+
+#if DEBUG
+    ~ALSource()
+    {
+        Debug.Assert(ID == 0);
+    }
+#endif
 }
