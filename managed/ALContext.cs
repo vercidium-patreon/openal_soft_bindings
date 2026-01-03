@@ -6,17 +6,17 @@
 public class ALContextSettings
 {
     /// <summary>
-    /// Whether to enable HRTF (Head-Related Transfer Function) for spatial audio
+    /// Whether to enable HRTF (Head-Related Transfer Function)
     /// </summary>
     public bool HRTFEnabled = true;
 
     /// <summary>
-    /// The HRTF profile ID to use (0 for default)
+    /// HRTF profile ID (defaults to 0)
     /// </summary>
     public int HRTFID = 0;
 
     /// <summary>
-    /// The audio output sample rate in Hz
+    /// Audio output sample rate in Hz
     /// </summary>
     public int SampleRate = 44100;
 
@@ -64,8 +64,8 @@ public class ALContext
     /// Creates a new OpenAL context with the specified settings
     /// </summary>
     /// <param name="device">The device to create the context on</param>
-    /// <param name="settings">Configuration settings for the context</param>
-    /// <exception cref="Exception">Thrown if context creation fails</exception>
+    /// <param name="settings">Context settings</param>
+    /// <exception cref="Exception">Thrown if it fails to create the context</exception>
     public ALContext(ALDevice device, ALContextSettings settings)
     {
         this.device = device;
@@ -82,8 +82,8 @@ public class ALContext
 
         MakeCurrent();
 
-        AL.Enable(AL.AL_DEBUG_OUTPUT_EXT);
-        device.SetupDebugMessageCallback(OpenALDebugCallback, IntPtr.Zero);
+        // Set up a debug callback for this context
+        DebugMessageCallback.Invoke(OpenALDebugCallback, IntPtr.Zero);
     }
 
     /// <summary>
@@ -152,7 +152,8 @@ public class ALContext
     /// </summary>
     public void Destroy()
     {
-        device.SetupDebugMessageCallback(null, IntPtr.Zero);
+        MakeCurrent();
+        DebugMessageCallback.Invoke(null, IntPtr.Zero);
         AL.DestroyContext(handle);
     }
 

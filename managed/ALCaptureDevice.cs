@@ -1,26 +1,31 @@
 ﻿namespace OpenAL.managed;
 
 /// <summary>
-/// Configuration settings for creating an audio capture device
+/// Configuration settings for creating an ALCaptureDevice
 /// </summary>
 public class ALCaptureDeviceSettings
 {
-    /// <summary>The name of the capture device to open</summary>
+    /// <summary>Name of the capture device to open</summary>
     public string DeviceName;
-    /// <summary>The audio sample rate in Hz</summary>
+
+    /// <summary>Audio sample rate in Hz</summary>
     public int SampleRate = 44100;
-    /// <summary>The audio format (e.g., AL_FORMAT_MONO16)</summary>
+
+    /// <summary>OpenAL audio format (e.g., AL.AL_FORMAT_MONO16)</summary>
     public int Format = AL.AL_FORMAT_MONO16;
-    /// <summary>The internal buffer size in frames</summary>
+
+    /// <summary>Internal buffer size (in frames)</summary>
     public int BufferSize = 1024;
+
     /// <summary>Optional logging callback</summary>
     public Action<string> LogCallback;
+
     /// <summary>Callback invoked when captured audio data is available</summary>
     public Action<nint, int> DataCallback;
 }
 
 /// <summary>
-/// Represents an OpenAL audio input capture device
+/// Represents an OpenAL input capture device
 /// </summary>
 public unsafe class ALCaptureDevice
 {
@@ -34,11 +39,11 @@ public unsafe class ALCaptureDevice
     int bytesPerFrame;
 
     /// <summary>
-    /// Opens an audio capture device with the specified settings
+    /// Opens a capture device with the specified settings
     /// </summary>
-    /// <param name="settings">Capture device configuration</param>
+    /// <param name="settings">Capture device settings</param>
     /// <exception cref="ArgumentException">Thrown if DataCallback is not provided</exception>
-    /// <exception cref="Exception">Thrown if device opening fails</exception>
+    /// <exception cref="Exception">Thrown if the capture device fails to open</exception>
     public ALCaptureDevice(ALCaptureDeviceSettings settings)
     {
         if (settings.DataCallback == null)
@@ -60,7 +65,7 @@ public unsafe class ALCaptureDevice
     }
 
     /// <summary>
-    /// Starts capturing audio
+    /// Start capturing audio
     /// </summary>
     public void CaptureStart()
     {
@@ -68,7 +73,7 @@ public unsafe class ALCaptureDevice
     }
 
     /// <summary>
-    /// Stops capturing audio
+    /// Stop capturing audio
     /// </summary>
     public void CaptureStop()
     {
@@ -76,7 +81,7 @@ public unsafe class ALCaptureDevice
     }
 
     /// <summary>
-    /// Polls for captured audio samples and invokes the data callback
+    /// Poll for captured audio samples. Invokes DataCallback with audio samples
     /// </summary>
     public void Update()
     {
@@ -96,11 +101,12 @@ public unsafe class ALCaptureDevice
     }
 
     /// <summary>
-    /// Closes the capture device and frees resources
+    /// Close the capture device and free resources
     /// </summary>
     public void Close()
     {
         CaptureStop();
+
         AL.CaptureCloseDevice(handle);
         handle = 0;
 

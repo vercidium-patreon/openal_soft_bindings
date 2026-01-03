@@ -1,39 +1,36 @@
 namespace OpenAL.managed;
 
-/// <summary>
-/// Helper for reopening devices using the ALC_SOFT_reopen_device extension
-/// </summary>
-internal class ReopenDeviceSoft
+internal unsafe class ReopenDeviceSoft
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     unsafe delegate bool AlcReopenDeviceSOFTDelegate(IntPtr device, [MarshalAs(UnmanagedType.LPUTF8Str)] string deviceName, int* attribs);
 
-    readonly AlcReopenDeviceSOFTDelegate reopenDevice;
+    static AlcReopenDeviceSOFTDelegate reopenDevice;
+    static bool firstInvocation = true;
 
-    /// <summary>
-    /// Initializes the reopen device extension function
-    /// </summary>
-    public ReopenDeviceSoft(IntPtr device)
+    static void Initialise()
     {
+        firstInvocation = false;
+
         // Check if the extension exists (ALC extension, not AL extension)
-        if (!AL.alcIsExtensionPresent(device, "ALC_SOFT_reopen_device"))
+        if (!AL.alcIsExtensionPresent(IntPtr.Zero, "ALC_SOFT_reopen_device"))
             return;
 
         // Get the function pointer
-        var ptr = AL.alcGetProcAddress(device, "alcReopenDeviceSOFT");
+        var ptr = AL.alcGetProcAddress(IntPtr.Zero, "alcReopenDeviceSOFT");
 
-        if (ptr != IntPtr.Zero)
-        {
-            // Convert to delegate and cache it
-            reopenDevice = Marshal.GetDelegateForFunctionPointer<AlcReopenDeviceSOFTDelegate>(ptr);
-        }
+        if (ptr == IntPtr.Zero)
+            return;
+
+        // Convert to delegate and cache it
+        reopenDevice = Marshal.GetDelegateForFunctionPointer<AlcReopenDeviceSOFTDelegate>(ptr);
     }
 
-    /// <summary>
-    /// Reopens the device with new settings
-    /// </summary>
-    public unsafe bool Invoke(IntPtr device, string deviceName, ReadOnlySpan<int> attribs)
+    internal static bool Invoke(IntPtr device, string deviceName, ReadOnlySpan<int> attribs)
     {
+        if (firstInvocation)
+            Initialise();
+
         if (reopenDevice == null)
             return false;
 

@@ -12,7 +12,6 @@ public class ALDevice
     /// </summary>
     public readonly IntPtr handle;
 
-    DebugMessageCallback debugMessageCallback;
     ReopenDeviceSoft reopenDevice;
 
     /// <summary>
@@ -60,20 +59,6 @@ public class ALDevice
     /// <returns>The error code</returns>
     public int GetErrorALC() => AL.GetError(handle);
 
-    // TODO - should this live on the device or the context?
-    /// <summary>
-    /// Sets up a debug message callback for this device
-    /// </summary>
-    /// <param name="callback">The callback function to invoke for debug messages</param>
-    /// <param name="userParam">User-defined parameter passed to the callback</param>
-    public void SetupDebugMessageCallback(AL.ALDebugProc callback, IntPtr userParam)
-    {
-        // These delegates are created here rather than in the constructor, because the AL context must be created first
-        Debug.Assert(AL.GetCurrentContext() != IntPtr.Zero);
-        debugMessageCallback ??= new(handle);
-        debugMessageCallback.Invoke(callback, userParam);
-    }
-
     /// <summary>
     /// Switches this device to a different output device. Requires the ALC_SOFT_reopen_device extension
     /// </summary>
@@ -85,8 +70,7 @@ public class ALDevice
         // Must have an existing context too
         Debug.Assert(AL.GetCurrentContext() != IntPtr.Zero);
 
-        reopenDevice ??= new(handle);
-        return reopenDevice.Invoke(handle, deviceName, attribs);
+        return ReopenDeviceSoft.Invoke(handle, deviceName, attribs);
     }
 
     /// <summary>
