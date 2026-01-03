@@ -4,6 +4,7 @@ global using Xunit;
 
 namespace openal_soft_bindings_test;
 
+[Collection("Sequential")]
 public class Device
 {
     [Fact]

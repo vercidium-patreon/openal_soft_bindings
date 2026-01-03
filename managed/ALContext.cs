@@ -134,9 +134,12 @@ public class ALContext
     /// <summary>
     /// Makes this context the current OpenAL context
     /// </summary>
-    /// <exception cref="Exception">Thrown if making the context current fails</exception>
+    /// <exception cref="Exception">Thrown if making the context current fails, or if the context has been destroyed</exception>
     public void MakeCurrent()
     {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] This context has been destroyed");
+
         if (!AL.MakeContextCurrent(handle))
             throw new Exception("[OpenAL] Failed to make the context current");
 
@@ -145,14 +148,25 @@ public class ALContext
 
     /// <summary>
     /// Resumes processing on this context (use after Suspend)
+    /// <exception cref="Exception">Thrown if the context has been destroyed</exception>
     /// </summary>
-    public void Process() => AL.ProcessContext(handle);
+    public void Process()
+    {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] This context has been destroyed");
+
+        AL.ProcessContext(handle);
+    }
 
     /// <summary>
     /// Destroys this context and cleans up resources
+    /// <exception cref="Exception">Thrown if the context has already been destroyed</exception>
     /// </summary>
     public void Destroy()
     {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] This context has already been destroyed");
+
         MakeCurrent();
         
         AL.Disable(AL.AL_DEBUG_OUTPUT_EXT);
@@ -166,12 +180,19 @@ public class ALContext
     /// Gets the current error state for this context's device
     /// </summary>
     /// <returns>The error code</returns>
-    public int GetErrorALC() => device.GetErrorALC();
+    /// <exception cref="Exception">Thrown if the context has been destroyed</exception>
+    public int GetErrorALC()
+    {
+        if (handle == IntPtr.Zero)
+            throw new Exception("[OpenAL] This context has been destroyed");
+
+        return device.GetErrorALC();
+    }
 
     /// <summary>
     /// Gets whether this context is the current active context
     /// </summary>
-    public bool IsCurrent => handle == AL.GetCurrentContext();
+    public bool IsCurrent => handle != IntPtr.Zero && handle == AL.GetCurrentContext();
 
     // Set up the callback
     void OpenALDebugCallback(int source, int type, int id, int severity, int length, IntPtr messagePtr, IntPtr userParam)

@@ -1,3 +1,9 @@
+# Version 1.0.4
+Added XML comments to all managed classes.
+Added destructor asserts to all managed classes (in DEBUG mode only) to alert when they are collected by the GC, but their AL resources have not been freed.
+Each ALContext now has its own debug callback function.
+ALDevice.Reopen() now functions correctly.
+
 # Version 1.0.3
 Created a new ALStreamSource class for streaming data to an OpenAL source (e.g. microphone input)
 
