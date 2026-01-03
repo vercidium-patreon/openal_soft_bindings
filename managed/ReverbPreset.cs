@@ -1,7 +1,13 @@
 ﻿namespace OpenAL;
 
+/// <summary>
+/// Defines a complete set of reverb parameters for spatial audio effects
+/// </summary>
 public class ReverbPreset
 {
+    /// <summary>
+    /// The name of this reverb preset
+    /// </summary>
     public string name;
 
     /// <summary>
@@ -176,6 +182,9 @@ public class ReverbPreset
     /// </summary>
     public int decayHFLimit;
 
+    /// <summary>
+    /// Creates a new reverb preset with all parameters
+    /// </summary>
     public ReverbPreset(string name, float density, float diffusion, float gain, float gainHF, float gainLF, float decayTime, float decayHFRatio, float decayLFRatio,
                         float reflectionsGain, float reflectionsDelay, float[] reflectionsPan, float lateReverbGain, float lateReverbDelay, float[] lateReverbPan,
                         float echoTime, float echoDepth, float modulationTime, float modulationDepth, float airAbsorptionGainHF, float hfReference, float lfReference,
@@ -207,6 +216,9 @@ public class ReverbPreset
         this.decayHFLimit = decayHFLimit;
     }
 
+    /// <summary>
+    /// Collection of predefined reverb presets for various environments
+    /// </summary>
     public static Dictionary<string, ReverbPreset> Presets = new()
     {
         // Generic

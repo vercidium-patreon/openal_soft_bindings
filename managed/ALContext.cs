@@ -1,24 +1,71 @@
 ﻿namespace OpenAL.managed;
 
+/// <summary>
+/// Configuration settings for creating an OpenAL context
+/// </summary>
 public class ALContextSettings
 {
+    /// <summary>
+    /// Whether to enable HRTF (Head-Related Transfer Function) for spatial audio
+    /// </summary>
     public bool HRTFEnabled = true;
+
+    /// <summary>
+    /// The HRTF profile ID to use (0 for default)
+    /// </summary>
     public int HRTFID = 0;
+
+    /// <summary>
+    /// The audio output sample rate in Hz
+    /// </summary>
     public int SampleRate = 44100;
+
+    /// <summary>
+    /// Maximum number of auxiliary effect sends per source
+    /// </summary>
     public int MaximumAuxiliarySends = 1;
+
+    /// <summary>
+    /// Maximum number of mono audio sources
+    /// </summary>
     public int MaximumMonoSources = 16;
+
+    /// <summary>
+    /// Maximum number of stereo audio sources
+    /// </summary>
     public int MaximumStereoSources = 240;
+
+    /// <summary>
+    /// Custom logging function (defaults to Console.WriteLine)
+    /// </summary>
     public Action<string> LogFunction;
 }
 
+/// <summary>
+/// Represents an OpenAL audio context
+/// </summary>
 public class ALContext
 {
+    /// <summary>
+    /// The device this context was created on
+    /// </summary>
     public readonly ALDevice device;
+
+    /// <summary>
+    /// The native context handle
+    /// </summary>
     public readonly IntPtr handle;
+
     readonly Action<string> Log;
 
     const string HRTF_EXTENSION = "ALC_SOFT_HRTF";
 
+    /// <summary>
+    /// Creates a new OpenAL context with the specified settings
+    /// </summary>
+    /// <param name="device">The device to create the context on</param>
+    /// <param name="settings">Configuration settings for the context</param>
+    /// <exception cref="Exception">Thrown if context creation fails</exception>
     public ALContext(ALDevice device, ALContextSettings settings)
     {
         this.device = device;
@@ -39,6 +86,11 @@ public class ALContext
         device.SetupDebugMessageCallback(OpenALDebugCallback, IntPtr.Zero);
     }
 
+    /// <summary>
+    /// Builds the attribute list for context creation from settings
+    /// </summary>
+    /// <param name="settings">The settings to convert to attributes</param>
+    /// <returns>Attribute array for context creation</returns>
     public int[] GetAttribs(ALContextSettings settings)
     {
         List<int> attribs =
@@ -78,6 +130,10 @@ public class ALContext
 
     private delegate void AlDebugMessageCallbackFunc(AL.ALDebugProc callback, IntPtr userParam);
 
+    /// <summary>
+    /// Makes this context the current OpenAL context
+    /// </summary>
+    /// <exception cref="Exception">Thrown if making the context current fails</exception>
     public void MakeCurrent()
     {
         if (!AL.MakeContextCurrent(handle))
@@ -86,15 +142,29 @@ public class ALContext
         Debug.Assert(IsCurrent);
     }
 
+    /// <summary>
+    /// Resumes processing on this context (use after Suspend)
+    /// </summary>
     public void Process() => AL.ProcessContext(handle);
+
+    /// <summary>
+    /// Destroys this context and cleans up resources
+    /// </summary>
     public void Destroy()
     {
         device.SetupDebugMessageCallback(null, IntPtr.Zero);
         AL.DestroyContext(handle);
     }
 
+    /// <summary>
+    /// Gets the current error state for this context's device
+    /// </summary>
+    /// <returns>The error code</returns>
     public int GetErrorALC() => device.GetErrorALC();
 
+    /// <summary>
+    /// Gets whether this context is the current active context
+    /// </summary>
     public bool IsCurrent => handle == AL.GetCurrentContext();
 
     // Set up the callback

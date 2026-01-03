@@ -1,5 +1,8 @@
 ﻿namespace OpenAL.managed;
 
+/// <summary>
+/// Helper for setting up OpenAL debug message callbacks via extension
+/// </summary>
 internal class DebugMessageCallback
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -7,6 +10,9 @@ internal class DebugMessageCallback
 
     readonly ALDebugMessageCallbackFunc debugMessageCallback;
 
+    /// <summary>
+    /// Initializes the debug callback extension function
+    /// </summary>
     public DebugMessageCallback(IntPtr handle)
     {
         // Check if the extension exists
@@ -23,5 +29,8 @@ internal class DebugMessageCallback
         }
     }
 
+    /// <summary>
+    /// Sets the debug message callback function
+    /// </summary>
     public void Invoke(AL.ALDebugProc callback, IntPtr userParam) => debugMessageCallback?.Invoke(callback, userParam);
 }

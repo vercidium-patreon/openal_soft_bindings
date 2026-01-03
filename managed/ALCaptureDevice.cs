@@ -1,15 +1,27 @@
 ﻿namespace OpenAL.managed;
 
+/// <summary>
+/// Configuration settings for creating an audio capture device
+/// </summary>
 public class ALCaptureDeviceSettings
 {
+    /// <summary>The name of the capture device to open</summary>
     public string DeviceName;
+    /// <summary>The audio sample rate in Hz</summary>
     public int SampleRate = 44100;
+    /// <summary>The audio format (e.g., AL_FORMAT_MONO16)</summary>
     public int Format = AL.AL_FORMAT_MONO16;
+    /// <summary>The internal buffer size in frames</summary>
     public int BufferSize = 1024;
+    /// <summary>Optional logging callback</summary>
     public Action<string> LogCallback;
+    /// <summary>Callback invoked when captured audio data is available</summary>
     public Action<nint, int> DataCallback;
 }
 
+/// <summary>
+/// Represents an OpenAL audio input capture device
+/// </summary>
 public unsafe class ALCaptureDevice
 {
     IntPtr handle;
@@ -21,6 +33,12 @@ public unsafe class ALCaptureDevice
     void* sampleBuffer;
     int bytesPerFrame;
 
+    /// <summary>
+    /// Opens an audio capture device with the specified settings
+    /// </summary>
+    /// <param name="settings">Capture device configuration</param>
+    /// <exception cref="ArgumentException">Thrown if DataCallback is not provided</exception>
+    /// <exception cref="Exception">Thrown if device opening fails</exception>
     public ALCaptureDevice(ALCaptureDeviceSettings settings)
     {
         if (settings.DataCallback == null)
@@ -41,16 +59,25 @@ public unsafe class ALCaptureDevice
         sampleBuffer = NativeMemory.Alloc((nuint)(BufferSize * bytesPerFrame));
     }
 
+    /// <summary>
+    /// Starts capturing audio
+    /// </summary>
     public void CaptureStart()
     {
         AL.CaptureStart(handle);
     }
 
+    /// <summary>
+    /// Stops capturing audio
+    /// </summary>
     public void CaptureStop()
     {
         AL.CaptureStop(handle);
     }
 
+    /// <summary>
+    /// Polls for captured audio samples and invokes the data callback
+    /// </summary>
     public void Update()
     {
         // OpenAL calls this 'samples' but it's actually frames
@@ -68,6 +95,9 @@ public unsafe class ALCaptureDevice
         DataCallback((nint)sampleBuffer, sampleCount);
     }
 
+    /// <summary>
+    /// Closes the capture device and frees resources
+    /// </summary>
     public void Close()
     {
         CaptureStop();

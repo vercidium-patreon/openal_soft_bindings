@@ -2,22 +2,38 @@ using System.Collections.Concurrent;
 
 namespace OpenAL.managed;
 
+/// <summary>
+/// Represents a buffer used for streaming audio data
+/// </summary>
 public unsafe class ALStreamSourceBuffer
 {
+    /// <summary>Managed byte array containing audio data (if using managed memory)</summary>
     public byte[] data;
+    /// <summary>Pointer to audio data (if using unmanaged memory)</summary>
     public byte* dataUnsafe;
+    /// <summary>Current offset within the buffer</summary>
     public int offset;
+    /// <summary>Remaining length of data in the buffer</summary>
     public int length;
 
     internal int originalOffset;
     internal int originalLength;
 }
 
+/// <summary>
+/// An audio source that streams audio data using a callback mechanism
+/// </summary>
 public unsafe class ALStreamSource : ALSource
 {
     uint bufferID;
     AL.ALBufferCallbackTypeSoft bufferCallback;
 
+    /// <summary>
+    /// Creates a new streaming audio source
+    /// </summary>
+    /// <param name="sourceID">The OpenAL source ID</param>
+    /// <param name="inputFormat">The audio format</param>
+    /// <param name="frequency">The sample rate in Hz</param>
     public ALStreamSource(uint sourceID, int inputFormat, int frequency) : base(sourceID)
     {
         bufferID = AL.GenBuffer();
@@ -33,6 +49,9 @@ public unsafe class ALStreamSource : ALSource
         AL.SourcePlay(sourceID);
     }
 
+    /// <summary>
+    /// Disposes the streaming source and its buffer
+    /// </summary>
     public override void Dispose()
     {
         base.Dispose();
@@ -40,7 +59,7 @@ public unsafe class ALStreamSource : ALSource
     }
 
     /// <summary>
-    /// Enqueues audio data from a managed byte array to be streamed to OpenAL.
+    /// Enqueues audio data from a managed byte array for playback.
     /// </summary>
     /// <param name="data">The byte array containing the audio data</param>
     /// <param name="offset">The offset within the array to start reading from</param>
@@ -58,7 +77,7 @@ public unsafe class ALStreamSource : ALSource
     }
 
     /// <summary>
-    /// Enqueues audio data from an unmanaged byte pointer to be streamed to OpenAL.
+    /// Enqueues audio data from an unmanaged byte pointer for playback.
     /// </summary>
     /// <param name="data">Pointer to the audio data buffer</param>
     /// <param name="offset">The offset within the buffer to start reading from</param>
