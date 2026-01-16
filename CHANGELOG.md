@@ -1,3 +1,6 @@
+# Version 1.0.5
+Added an effectSlotGain parameter to ALReverbEffect
+
 # Version 1.0.4
 Added XML comments to all managed classes.
 Added destructor asserts to all managed classes (in DEBUG mode only) to alert when they are collected by the GC, but their AL resources have not been freed.

@@ -18,9 +18,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.4</Version>
-		<PackageReleaseNotes>
-		</PackageReleaseNotes>
+		<Version>1.0.5</Version>
+		<PackageReleaseNotes>Added an effectSlotGain parameter to ALReverbEffect</PackageReleaseNotes>
 	</PropertyGroup>
 
     <ItemGroup>
