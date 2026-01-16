@@ -88,6 +88,7 @@ public class ALReverbEffect
         AL.Effectf(effectID, AL.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, roomRolloffFactor);
         AL.Effecti(effectID, AL.AL_EAXREVERB_DECAY_HFLIMIT, decayHFLimit);
 
+        AL.AuxiliaryEffectSlotf(effectSlotID, AL.AL_EFFECTSLOT_GAIN, effectSlotGain);
         AL.AuxiliaryEffectSloti(effectSlotID, AL.AL_EFFECTSLOT_EFFECT, (int)effectID);
 
         dirty = false;
@@ -192,6 +193,9 @@ public class ALReverbEffect
 
     /// <summary>High-frequency decay limit flag</summary>
     public int decayHFLimit;
+
+    /// <summary>The gain of the entire effect</summary>
+    public float effectSlotGain = 1;
 
 #if DEBUG
     ~ALReverbEffect()
