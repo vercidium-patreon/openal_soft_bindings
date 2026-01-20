@@ -18,8 +18,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.5</Version>
-		<PackageReleaseNotes>Added an effectSlotGain parameter to ALReverbEffect</PackageReleaseNotes>
+		<Version>1.0.6</Version>
+		<PackageReleaseNotes>Removed openal_soft_bindings.dll.config. Using DllImportResolver instead</PackageReleaseNotes>
 	</PropertyGroup>
 
     <ItemGroup>

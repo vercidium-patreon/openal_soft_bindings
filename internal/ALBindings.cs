@@ -1,9 +1,64 @@
+using System.Reflection;
+
 namespace OpenAL;
 
 public static unsafe partial class AL
 {
     private const string nativeLibName = "soft_oal.dll";
 
+    static AL()
+    {
+        NativeLibrary.SetDllImportResolver(Assembly.GetExecutingAssembly(), DllImportResolver);
+    }
+
+    private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+    {
+        if (libraryName == nativeLibName)
+        {
+            string platformLibrary;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                platformLibrary = "soft_oal.dll";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                platformLibrary = "libopenal.so.1";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                platformLibrary = "libopenal.1.dylib";
+            }
+            else
+            {
+                string osDescription = RuntimeInformation.OSDescription;
+                Console.Error.WriteLine($"[openal_soft_bindings] Unknown platform: {osDescription}");
+                return IntPtr.Zero;
+            }
+
+            if (NativeLibrary.TryLoad(platformLibrary, assembly, searchPath, out IntPtr handle))
+            {
+                return handle;
+            }
+            else
+            {
+                Console.Error.WriteLine($"[openal_soft_bindings] Failed to load: {platformLibrary}");
+                Console.Error.WriteLine($"[openal_soft_bindings] Search paths attempted:");
+                Console.Error.WriteLine($"  - Current directory: {Environment.CurrentDirectory}");
+                Console.Error.WriteLine($"  - Assembly location: {assembly.Location}");
+
+                string ldLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+                if (!string.IsNullOrEmpty(ldLibraryPath))
+                {
+                    Console.Error.WriteLine($"  - LD_LIBRARY_PATH: {ldLibraryPath}");
+                }
+
+                return IntPtr.Zero;
+            }
+        }
+
+        return IntPtr.Zero;
+    }
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     internal static partial void alEnable(int capability);
