@@ -1,4 +1,4 @@
-# Version 1.0.7
+# Version 1.0.7-alpha.1
 Debug logging for DllImportResolver for Linux.
 
 # Version 1.0.6
