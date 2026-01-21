@@ -18,9 +18,15 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.7-alpha.1</Version>
-		<PackageReleaseNotes>Debug logging for DllImportResolver for Linux.</PackageReleaseNotes>
+		<Version>1.0.7-alpha.2</Version>
+		<PackageReleaseNotes>Working on using libsoftal.so.1 for Linux.</PackageReleaseNotes>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="linux_test\**" />
+	  <EmbeddedResource Remove="linux_test\**" />
+	  <None Remove="linux_test\**" />
+	</ItemGroup>
 
     <ItemGroup>
       <None Update="LICENSE.txt">

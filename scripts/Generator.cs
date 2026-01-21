@@ -1,3 +1,4 @@
+#if DEBUG
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -824,3 +825,4 @@ class TypeInfo
 {
     public string CsType { get; set; }
 }
+#endif

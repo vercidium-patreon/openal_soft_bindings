@@ -1,3 +1,6 @@
+# Version 1.0.7-alpha.2
+Working on using libsoftal.so.1 for Linux.
+
 # Version 1.0.7-alpha.1
 Debug logging for DllImportResolver for Linux.
 
