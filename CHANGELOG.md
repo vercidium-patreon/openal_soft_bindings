@@ -1,5 +1,11 @@
+# Version 1.0.7
+Debug logging for DllImportResolver for Linux.
+
+# Version 1.0.6
+Removed openal_soft_bindings.dll.config. Using DllImportResolver instead.
+
 # Version 1.0.5
-Added an effectSlotGain parameter to ALReverbEffect
+Added an effectSlotGain parameter to ALReverbEffect.
 
 # Version 1.0.4
 Added XML comments to all managed classes.

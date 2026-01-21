@@ -111,6 +111,8 @@ public class ReverbEffect
         // Should return early without throwing
         reverb.Update();
 
+        // 'Dispose'
+        reverb.effectSlotID = 0;
         CleanupDeviceAndContext(device, context);
     }
 

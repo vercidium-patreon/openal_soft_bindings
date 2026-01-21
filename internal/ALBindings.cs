@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reflection;
 
 namespace OpenAL;
@@ -5,60 +6,78 @@ namespace OpenAL;
 public static unsafe partial class AL
 {
     private const string nativeLibName = "soft_oal.dll";
+    private static IntPtr libraryHandle;
 
     static AL()
     {
+        // Diagnostic logging
+        Console.WriteLine($"[godot_openal] OS Description: {RuntimeInformation.OSDescription}");
+        Console.WriteLine($"[godot_openal] OS Architecture: {RuntimeInformation.OSArchitecture}");
+        Console.WriteLine($"[godot_openal] Process Architecture: {RuntimeInformation.ProcessArchitecture}");
+        Console.WriteLine($"[godot_openal] Framework Description: {RuntimeInformation.FrameworkDescription}");
+        Console.WriteLine($"[godot_openal] Is Windows: {RuntimeInformation.IsOSPlatform(OSPlatform.Windows)}");
+        Console.WriteLine($"[godot_openal] Is Linux: {RuntimeInformation.IsOSPlatform(OSPlatform.Linux)}");
+        Console.WriteLine($"[godot_openal] Is OSX: {RuntimeInformation.IsOSPlatform(OSPlatform.OSX)}");
+
+        string platformLibrary;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            platformLibrary = "soft_oal.dll";
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            platformLibrary = "libopenal.so.1";
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            platformLibrary = "libopenal.1.dylib";
+        }
+        else
+        {
+            string osDescription = RuntimeInformation.OSDescription;
+            Console.Error.WriteLine($"[godot_openal] Unknown platform: {osDescription}");
+            throw new PlatformNotSupportedException($"Unsupported platform: {osDescription}");
+        }
+
+        Console.WriteLine($"[godot_openal] Selected library: {platformLibrary}");
+        Console.WriteLine($"[godot_openal] Current directory: {Environment.CurrentDirectory}");
+        Console.WriteLine($"[godot_openal] Assembly location: {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}");
+
+        if (NativeLibrary.TryLoad(platformLibrary, out libraryHandle))
+        {
+            Console.WriteLine($"[godot_openal] Successfully loaded: {platformLibrary}");
+        }
+        else
+        {
+            Console.Error.WriteLine($"[godot_openal] Failed to load: {platformLibrary}");
+
+            string ldLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+            if (!string.IsNullOrEmpty(ldLibraryPath))
+            {
+                Console.Error.WriteLine($"  - LD_LIBRARY_PATH: {ldLibraryPath}");
+            }
+
+            throw new DllNotFoundException($"Unable to load {platformLibrary}. Make sure the library is in one of the search paths above.");
+        }
+
         NativeLibrary.SetDllImportResolver(Assembly.GetExecutingAssembly(), DllImportResolver);
     }
 
     private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
+        Console.WriteLine($"[godot_openal] DllImportResolver called for: {libraryName}");
+
         if (libraryName == nativeLibName)
         {
-            string platformLibrary;
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                platformLibrary = "soft_oal.dll";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                platformLibrary = "libopenal.so.1";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                platformLibrary = "libopenal.1.dylib";
-            }
-            else
-            {
-                string osDescription = RuntimeInformation.OSDescription;
-                Console.Error.WriteLine($"[openal_soft_bindings] Unknown platform: {osDescription}");
-                return IntPtr.Zero;
-            }
-
-            if (NativeLibrary.TryLoad(platformLibrary, assembly, searchPath, out IntPtr handle))
-            {
-                return handle;
-            }
-            else
-            {
-                Console.Error.WriteLine($"[openal_soft_bindings] Failed to load: {platformLibrary}");
-                Console.Error.WriteLine($"[openal_soft_bindings] Search paths attempted:");
-                Console.Error.WriteLine($"  - Current directory: {Environment.CurrentDirectory}");
-                Console.Error.WriteLine($"  - Assembly location: {assembly.Location}");
-
-                string ldLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
-                if (!string.IsNullOrEmpty(ldLibraryPath))
-                {
-                    Console.Error.WriteLine($"  - LD_LIBRARY_PATH: {ldLibraryPath}");
-                }
-
-                return IntPtr.Zero;
-            }
+            Console.WriteLine($"[godot_openal] Returning preloaded handle: {libraryHandle}");
+            return libraryHandle;
         }
 
+        Console.WriteLine($"[godot_openal] Returning null handle");
         return IntPtr.Zero;
     }
+
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     internal static partial void alEnable(int capability);

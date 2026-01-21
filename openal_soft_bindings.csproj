@@ -18,8 +18,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.6</Version>
-		<PackageReleaseNotes>Removed openal_soft_bindings.dll.config. Using DllImportResolver instead</PackageReleaseNotes>
+		<Version>1.0.7</Version>
+		<PackageReleaseNotes>Debug logging for DllImportResolver for Linux.</PackageReleaseNotes>
 	</PropertyGroup>
 
     <ItemGroup>
