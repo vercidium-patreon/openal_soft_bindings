@@ -11,13 +11,13 @@ public static unsafe partial class AL
     static AL()
     {
         // Diagnostic logging
-        Console.WriteLine($"[openal_soft_bindings] OS Description: {RuntimeInformation.OSDescription}");
-        Console.WriteLine($"[openal_soft_bindings] OS Architecture: {RuntimeInformation.OSArchitecture}");
-        Console.WriteLine($"[openal_soft_bindings] Process Architecture: {RuntimeInformation.ProcessArchitecture}");
-        Console.WriteLine($"[openal_soft_bindings] Framework Description: {RuntimeInformation.FrameworkDescription}");
-        Console.WriteLine($"[openal_soft_bindings] Is Windows: {RuntimeInformation.IsOSPlatform(OSPlatform.Windows)}");
-        Console.WriteLine($"[openal_soft_bindings] Is Linux: {RuntimeInformation.IsOSPlatform(OSPlatform.Linux)}");
-        Console.WriteLine($"[openal_soft_bindings] Is OSX: {RuntimeInformation.IsOSPlatform(OSPlatform.OSX)}");
+        Logger.Log($"[openal_soft_bindings] OS Description: {RuntimeInformation.OSDescription}");
+        Logger.Log($"[openal_soft_bindings] OS Architecture: {RuntimeInformation.OSArchitecture}");
+        Logger.Log($"[openal_soft_bindings] Process Architecture: {RuntimeInformation.ProcessArchitecture}");
+        Logger.Log($"[openal_soft_bindings] Framework Description: {RuntimeInformation.FrameworkDescription}");
+        Logger.Log($"[openal_soft_bindings] Is Windows: {RuntimeInformation.IsOSPlatform(OSPlatform.Windows)}");
+        Logger.Log($"[openal_soft_bindings] Is Linux: {RuntimeInformation.IsOSPlatform(OSPlatform.Linux)}");
+        Logger.Log($"[openal_soft_bindings] Is OSX: {RuntimeInformation.IsOSPlatform(OSPlatform.OSX)}");
 
         string platformLibrary;
 
@@ -36,45 +36,55 @@ public static unsafe partial class AL
         else
         {
             string osDescription = RuntimeInformation.OSDescription;
-            Console.Error.WriteLine($"[openal_soft_bindings] Unknown platform: {osDescription}");
+            Logger.Error($"[openal_soft_bindings] Unknown platform: {osDescription}");
             throw new PlatformNotSupportedException($"Unsupported platform: {osDescription}");
         }
 
-        Console.WriteLine($"[openal_soft_bindings] Selected library: {platformLibrary}");
-        Console.WriteLine($"[openal_soft_bindings] Current directory: {Environment.CurrentDirectory}");
-        Console.WriteLine($"[openal_soft_bindings] Assembly location: {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}");
+        Logger.Log($"[openal_soft_bindings] Selected library: {platformLibrary}");
+        Logger.Log($"[openal_soft_bindings] Environment.CurrentDirectory: {Environment.CurrentDirectory}");
+        Logger.Log($"[openal_soft_bindings] AppContext.BaseDirectory: {AppContext.BaseDirectory}");
+        Logger.Log($"[openal_soft_bindings] Assembly.GetExecutingAssembly().Location: {Assembly.GetExecutingAssembly().Location}");
 
         if (NativeLibrary.TryLoad(platformLibrary, out libraryHandle))
         {
-            Console.WriteLine($"[openal_soft_bindings] Successfully loaded: {platformLibrary}");
+            Logger.Log($"[openal_soft_bindings] Successfully loaded: {platformLibrary}");
         }
         else
         {
-            Console.Error.WriteLine($"[openal_soft_bindings] Failed to load: {platformLibrary}");
+            Logger.Error($"[openal_soft_bindings] Failed to load: {platformLibrary}");
 
             string ldLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
             if (!string.IsNullOrEmpty(ldLibraryPath))
-            {
-                Console.Error.WriteLine($"  - LD_LIBRARY_PATH: {ldLibraryPath}");
-            }
+                Logger.Error($"[openal_soft_bindings] LD_LIBRARY_PATH: {ldLibraryPath}");
 
-            throw new DllNotFoundException($"Unable to load {platformLibrary}. Make sure the library is in one of the search paths above.");
+            throw new DllNotFoundException($"[openal_soft_bindings] Unable to load {platformLibrary}. Make sure the library is in one of the search paths above.");
         }
 
         NativeLibrary.SetDllImportResolver(Assembly.GetExecutingAssembly(), DllImportResolver);
     }
 
+    static bool logged = false;
+
     private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
-        Console.WriteLine($"[openal_soft_bindings] DllImportResolver called for: {libraryName}");
+        // Avoid log spam
+        var shouldLog = !logged;
+        logged = true;
+
+        if (shouldLog)
+            Logger.Log($"[openal_soft_bindings] DllImportResolver called for: {libraryName}");
 
         if (libraryName == nativeLibName)
         {
-            Console.WriteLine($"[openal_soft_bindings] Returning preloaded handle: {libraryHandle}");
+            if (shouldLog)
+                Logger.Log($"[openal_soft_bindings] Returning preloaded handle: {libraryHandle}");
+
             return libraryHandle;
         }
 
-        Console.WriteLine($"[openal_soft_bindings] Returning null handle");
+        if (shouldLog)
+            Logger.Error($"[openal_soft_bindings] Returning null handle");
+
         return IntPtr.Zero;
     }
 

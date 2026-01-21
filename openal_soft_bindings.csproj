@@ -18,8 +18,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.7-alpha.2</Version>
-		<PackageReleaseNotes>Working on using libsoftal.so.1 for Linux.</PackageReleaseNotes>
+		<Version>1.0.7</Version>
+		<PackageReleaseNotes>Logging can now be enabled by setting the callbacks in the static OpenAL.Logger class.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
