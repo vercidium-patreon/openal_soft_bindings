@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\openal_soft_bindings.csproj" />
+	</ItemGroup>
+	<Target Name="CopyFileToOutput" AfterTargets="Build">
+		<Copy SourceFiles="$(ProjectDir)..\soft_oal.dll" DestinationFolder="$(OutputPath)" />
+		<Copy SourceFiles="$(ProjectDir)..\libopenal.so.1" DestinationFolder="$(OutputPath)" />
+	</Target>
+</Project>

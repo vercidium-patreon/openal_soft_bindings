@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openal_soft_bindings", "ope
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openal_soft_bindings_test", "test\openal_soft_bindings_test.csproj", "{C5FDD29D-71ED-B66A-EE55-A3E38CB8225A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "linux_test", "linux_test\linux_test.csproj", "{ABA25D04-816C-410E-B420-581FE900A4FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C5FDD29D-71ED-B66A-EE55-A3E38CB8225A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5FDD29D-71ED-B66A-EE55-A3E38CB8225A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5FDD29D-71ED-B66A-EE55-A3E38CB8225A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA25D04-816C-410E-B420-581FE900A4FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA25D04-816C-410E-B420-581FE900A4FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA25D04-816C-410E-B420-581FE900A4FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA25D04-816C-410E-B420-581FE900A4FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
