@@ -11,13 +11,13 @@ public static unsafe partial class AL
     static AL()
     {
         // Diagnostic logging
-        Console.WriteLine($"[godot_openal] OS Description: {RuntimeInformation.OSDescription}");
-        Console.WriteLine($"[godot_openal] OS Architecture: {RuntimeInformation.OSArchitecture}");
-        Console.WriteLine($"[godot_openal] Process Architecture: {RuntimeInformation.ProcessArchitecture}");
-        Console.WriteLine($"[godot_openal] Framework Description: {RuntimeInformation.FrameworkDescription}");
-        Console.WriteLine($"[godot_openal] Is Windows: {RuntimeInformation.IsOSPlatform(OSPlatform.Windows)}");
-        Console.WriteLine($"[godot_openal] Is Linux: {RuntimeInformation.IsOSPlatform(OSPlatform.Linux)}");
-        Console.WriteLine($"[godot_openal] Is OSX: {RuntimeInformation.IsOSPlatform(OSPlatform.OSX)}");
+        Console.WriteLine($"[openal_soft_bindings] OS Description: {RuntimeInformation.OSDescription}");
+        Console.WriteLine($"[openal_soft_bindings] OS Architecture: {RuntimeInformation.OSArchitecture}");
+        Console.WriteLine($"[openal_soft_bindings] Process Architecture: {RuntimeInformation.ProcessArchitecture}");
+        Console.WriteLine($"[openal_soft_bindings] Framework Description: {RuntimeInformation.FrameworkDescription}");
+        Console.WriteLine($"[openal_soft_bindings] Is Windows: {RuntimeInformation.IsOSPlatform(OSPlatform.Windows)}");
+        Console.WriteLine($"[openal_soft_bindings] Is Linux: {RuntimeInformation.IsOSPlatform(OSPlatform.Linux)}");
+        Console.WriteLine($"[openal_soft_bindings] Is OSX: {RuntimeInformation.IsOSPlatform(OSPlatform.OSX)}");
 
         string platformLibrary;
 
@@ -36,21 +36,21 @@ public static unsafe partial class AL
         else
         {
             string osDescription = RuntimeInformation.OSDescription;
-            Console.Error.WriteLine($"[godot_openal] Unknown platform: {osDescription}");
+            Console.Error.WriteLine($"[openal_soft_bindings] Unknown platform: {osDescription}");
             throw new PlatformNotSupportedException($"Unsupported platform: {osDescription}");
         }
 
-        Console.WriteLine($"[godot_openal] Selected library: {platformLibrary}");
-        Console.WriteLine($"[godot_openal] Current directory: {Environment.CurrentDirectory}");
-        Console.WriteLine($"[godot_openal] Assembly location: {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}");
+        Console.WriteLine($"[openal_soft_bindings] Selected library: {platformLibrary}");
+        Console.WriteLine($"[openal_soft_bindings] Current directory: {Environment.CurrentDirectory}");
+        Console.WriteLine($"[openal_soft_bindings] Assembly location: {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}");
 
         if (NativeLibrary.TryLoad(platformLibrary, out libraryHandle))
         {
-            Console.WriteLine($"[godot_openal] Successfully loaded: {platformLibrary}");
+            Console.WriteLine($"[openal_soft_bindings] Successfully loaded: {platformLibrary}");
         }
         else
         {
-            Console.Error.WriteLine($"[godot_openal] Failed to load: {platformLibrary}");
+            Console.Error.WriteLine($"[openal_soft_bindings] Failed to load: {platformLibrary}");
 
             string ldLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
             if (!string.IsNullOrEmpty(ldLibraryPath))
@@ -66,15 +66,15 @@ public static unsafe partial class AL
 
     private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
-        Console.WriteLine($"[godot_openal] DllImportResolver called for: {libraryName}");
+        Console.WriteLine($"[openal_soft_bindings] DllImportResolver called for: {libraryName}");
 
         if (libraryName == nativeLibName)
         {
-            Console.WriteLine($"[godot_openal] Returning preloaded handle: {libraryHandle}");
+            Console.WriteLine($"[openal_soft_bindings] Returning preloaded handle: {libraryHandle}");
             return libraryHandle;
         }
 
-        Console.WriteLine($"[godot_openal] Returning null handle");
+        Console.WriteLine($"[openal_soft_bindings] Returning null handle");
         return IntPtr.Zero;
     }
 
