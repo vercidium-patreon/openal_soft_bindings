@@ -18,8 +18,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.7</Version>
-		<PackageReleaseNotes>Logging can now be enabled by setting the callbacks in the static OpenAL.Logger class.</PackageReleaseNotes>
+		<Version>1.0.8</Version>
+		<PackageReleaseNotes>The correct OpenAL soft binary (libopenal.so.1) is now used on Linux.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

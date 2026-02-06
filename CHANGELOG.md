@@ -1,3 +1,6 @@
+# Version 1.0.8
+The correct OpenAL soft binary (libopenal.so.1) is now used on Linux.
+
 # Version 1.0.7
 Logging can now be enabled by setting the callbacks in the static OpenAL.Logger class.
 

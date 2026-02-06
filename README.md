@@ -24,7 +24,7 @@ Modern, high-performance C# bindings for OpenAL Soft, with managed wrappers for 
 - .NET 8.0 or later
 - OpenAL Soft library:
   - soft_oal.dll on Windows
-  - libopenal.so on Linux
+  - libopenal.so.1 on Linux
   - libopenal.1.dylib on OSX
 
 ## Quick Start
