@@ -1,6 +1,6 @@
 namespace OpenAL;
 
-public static unsafe partial class AL
+public static partial class AL
 {
     public static uint GenEffect() => GenEffects(1)[0];
     public static uint[] GenEffects(int count)

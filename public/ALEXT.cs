@@ -1,6 +1,6 @@
 namespace OpenAL;
 
-public static unsafe partial class AL
+public static partial class AL
 {
     public static bool SetThreadContext(IntPtr context) => alcSetThreadContext(context);
     

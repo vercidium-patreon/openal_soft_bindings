@@ -3,7 +3,7 @@ namespace OpenAL;
 internal static unsafe class ReopenDeviceSoft
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    unsafe delegate bool AlcReopenDeviceSOFTDelegate(IntPtr device, [MarshalAs(UnmanagedType.LPUTF8Str)] string deviceName, int* attribs);
+delegate bool AlcReopenDeviceSOFTDelegate(IntPtr device, [MarshalAs(UnmanagedType.LPUTF8Str)] string deviceName, int* attribs);
 
     private static readonly LazyExtensionLoader<AlcReopenDeviceSOFTDelegate> loader = new("ALC_SOFT_reopen_device", "alcReopenDeviceSOFT", isAlcExtension: true);
 

@@ -1,6 +1,6 @@
 namespace OpenAL;
 
-public static unsafe partial class AL
+public static partial class AL
 {
     public static IntPtr CreateContext(IntPtr device, ReadOnlySpan<int> attrlist) => alcCreateContext(device, attrlist);
     

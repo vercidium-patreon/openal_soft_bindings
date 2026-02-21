@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace OpenAL;
 
-public static unsafe partial class AL
+public static partial class AL
 {
     private const string nativeLibName = "soft_oal.dll";
     private static IntPtr libraryHandle;

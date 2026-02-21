@@ -16,6 +16,11 @@ public class ALContextSettings
     public int HRTFID = 0;
 
     /// <summary>
+    /// Whether to enable Ambisonics
+    /// </summary>
+    public bool AmbisonicsEnabled = false;
+
+    /// <summary>
     /// Audio output sample rate in Hz
     /// </summary>
     public int SampleRate = 44100;
@@ -59,6 +64,7 @@ public class ALContext
     readonly Action<string> Log;
 
     const string HRTF_EXTENSION = "ALC_SOFT_HRTF";
+    const string AMBISONICS_EXTENSION = "ALC_SOFT_loopback_bformat";
 
     /// <summary>
     /// Creates a new OpenAL context with the specified settings
@@ -107,29 +113,46 @@ public class ALContext
         ];
 
         // Attempt to enable HRTF
-        var hasHrtfExtension = device.HasExtension(HRTF_EXTENSION);
-
-        // Enable HRTF
-        attribs.Add(AL.ALC_HRTF_SOFT);
-        attribs.Add(hasHrtfExtension ? 1 : 0);
-
-        if (hasHrtfExtension)
+        if (settings.HRTFEnabled)
         {
-            // Use the default HRTF specifier (0)
-            attribs.Add(AL.ALC_HRTF_ID_SOFT);
-            attribs.Add(settings.HRTFID);
+            var hasHrtfExtension = device.HasExtension(HRTF_EXTENSION);
+
+            // Enable HRTF
+            attribs.Add(AL.ALC_HRTF_SOFT);
+            attribs.Add(hasHrtfExtension ? 1 : 0);
+
+            if (hasHrtfExtension)
+            {
+                // Use the default HRTF specifier (0)
+                attribs.Add(AL.ALC_HRTF_ID_SOFT);
+                attribs.Add(settings.HRTFID);
+            }
+            else
+                Log($"[OpenAL] Unable to enable HRTF as the {HRTF_EXTENSION} extension is missing");
         }
-        else
-            Log($"[OpenAL] Unable to enable HRTF as the {HRTF_EXTENSION} extension is missing");
+
+        if (settings.AmbisonicsEnabled)
+        {
+            var hasAmbisonicsExtension = device.HasExtension("ALC_SOFT_loopback_bformat");
+
+            if (hasAmbisonicsExtension)
+            {
+                attribs.Add(AL.ALC_AMBISONIC_ORDER_SOFT);
+                attribs.Add(1);
+
+                attribs.Add(AL.ALC_AMBISONIC_LAYOUT_SOFT);
+                attribs.Add(AL.AL_FUMA_SOFT);
+
+                attribs.Add(AL.ALC_AMBISONIC_SCALING_SOFT);
+                attribs.Add(AL.AL_FUMA_SOFT);
+            }
+        }
 
         attribs.Add(0);
         attribs.Add(0);
 
         return attribs.ToArray();
     }
-
-
-    private delegate void AlDebugMessageCallbackFunc(AL.ALDebugProc callback, IntPtr userParam);
 
     /// <summary>
     /// Makes this context the current OpenAL context

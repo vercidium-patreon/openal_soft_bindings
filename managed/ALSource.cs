@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents an OpenAL audio source
 /// </summary>
-public unsafe class ALSource
+public class ALSource
 {
     /// <summary>
     /// OpenAL source ID
@@ -18,7 +18,11 @@ public unsafe class ALSource
     {
         Debug.Assert(ID > 0);
         this.ID = ID;
+
+        stackTrace = Environment.StackTrace;
     }
+
+    string stackTrace;
 
     /// <summary>Start playing the source</summary>
     public void Play() => AL.SourcePlay(ID);
