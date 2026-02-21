@@ -16,11 +16,6 @@ public class ALContextSettings
     public int HRTFID = 0;
 
     /// <summary>
-    /// Whether to enable Ambisonics
-    /// </summary>
-    public bool AmbisonicsEnabled = false;
-
-    /// <summary>
     /// Audio output sample rate in Hz
     /// </summary>
     public int SampleRate = 44100;
@@ -64,7 +59,6 @@ public class ALContext
     readonly Action<string> Log;
 
     const string HRTF_EXTENSION = "ALC_SOFT_HRTF";
-    const string AMBISONICS_EXTENSION = "ALC_SOFT_loopback_bformat";
 
     /// <summary>
     /// Creates a new OpenAL context with the specified settings
@@ -129,23 +123,6 @@ public class ALContext
             }
             else
                 Log($"[OpenAL] Unable to enable HRTF as the {HRTF_EXTENSION} extension is missing");
-        }
-
-        if (settings.AmbisonicsEnabled)
-        {
-            var hasAmbisonicsExtension = device.HasExtension("ALC_SOFT_loopback_bformat");
-
-            if (hasAmbisonicsExtension)
-            {
-                attribs.Add(AL.ALC_AMBISONIC_ORDER_SOFT);
-                attribs.Add(1);
-
-                attribs.Add(AL.ALC_AMBISONIC_LAYOUT_SOFT);
-                attribs.Add(AL.AL_FUMA_SOFT);
-
-                attribs.Add(AL.ALC_AMBISONIC_SCALING_SOFT);
-                attribs.Add(AL.AL_FUMA_SOFT);
-            }
         }
 
         attribs.Add(0);
