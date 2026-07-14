@@ -28,6 +28,8 @@ public class ALFilter
     public ALFilter(float gain, float gainHF)
     {
         ID = AL.GenFilter();
+        Debug.Assert(ID > 0);
+
         AL.Filteri(ID, AL.AL_FILTER_TYPE, AL.AL_FILTER_LOWPASS);
 
         SetGain(gain, gainHF);

@@ -18,11 +18,10 @@ public class ALSource
     {
         Debug.Assert(ID > 0);
         this.ID = ID;
-
-        stackTrace = Environment.StackTrace;
     }
 
-    string stackTrace;
+    /// <summary>The total duration of the source in milliseconds</summary>
+    public int Duration;
 
     /// <summary>Start playing the source</summary>
     public void Play() => AL.SourcePlay(ID);
@@ -73,6 +72,7 @@ public class ALSource
 
     /// <summary>Current playback offset in seconds</summary>
     public float secOffset;
+
     /// <summary>Set the playback position in seconds</summary>
     public void SetSecOffset(float seconds)
     {
@@ -92,7 +92,6 @@ public class ALSource
         var directFilterID = (int)(directFilter?.ID ?? 0);
         var reverbFilterID = (int)(reverbFilter?.ID ?? 0);
         var effectSlotID = (int)(reverbEffect?.effectSlotID ?? 0);
-
 
         // Set direct filter
         AL.Sourcei(ID, AL.AL_DIRECT_FILTER, directFilterID);
