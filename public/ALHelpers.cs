@@ -56,7 +56,7 @@ public static partial class AL
             if (bitDepth == 8)
                 return AL_FORMAT_QUAD8;
             else if (bitDepth == 16)
-                return AL_FORMAT_BFORMAT3D_16;
+                return AL_FORMAT_QUAD16;
             else if (bitDepth == 32)
                 return AL_FORMAT_QUAD32;
         }

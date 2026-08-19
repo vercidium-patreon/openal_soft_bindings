@@ -1,3 +1,8 @@
+# Version 1.0.9
+HRTF is now only enabled when ALContextSettings.HRTFEnabled is set to true.
+Added an ALSource.Duration field.
+Fixed GetSoundFormat() returning AL_FORMAT_BFORMAT3D_16 instead of AL_FORMAT_QUAD16 for 4-channel 16-bit audio.
+
 # Version 1.0.8
 The correct OpenAL soft binary (libopenal.so.1) is now used on Linux.
 
