@@ -18,8 +18,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.9</Version>
-		<PackageReleaseNotes>HRTF is now only enabled when ALContextSettings.HRTFEnabled is set to true. Fixed GetSoundFormat() returning AL_FORMAT_BFORMAT3D_16 instead of AL_FORMAT_QUAD16 for 4-channel 16-bit audio.</PackageReleaseNotes>
+		<Version>1.1.0</Version>
+		<PackageReleaseNotes>Fixed a crash when ALDebugProc was invoked.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -36,9 +36,9 @@ public class ALContextSettings
     public int MaximumStereoSources = 240;
 
     /// <summary>
-    /// Custom logging function (defaults to Console.WriteLine)
+    /// Custom logging function for warnings (defaults to Console.WriteLine)
     /// </summary>
-    public Action<string> LogFunction;
+    public Action<string> LogWarning;
 }
 
 /// <summary>
@@ -56,7 +56,10 @@ public class ALContext
     /// </summary>
     public IntPtr handle;
 
-    readonly Action<string> Log;
+    readonly Action<string> LogWarning;
+
+    // Must keep a copy of the delegate to prevent garbage collection
+    readonly AL.ALDebugProc debugCallback;
 
     const string HRTF_EXTENSION = "ALC_SOFT_HRTF";
 
@@ -70,7 +73,7 @@ public class ALContext
     {
         this.device = device;
 
-        Log = settings.LogFunction ?? Console.WriteLine;
+        LogWarning = settings.LogWarning ?? Console.WriteLine;
 
         var attribs = GetAttribs(settings);
 
@@ -84,7 +87,8 @@ public class ALContext
 
         // Set up a debug callback for this context
         AL.Enable(AL.AL_DEBUG_OUTPUT_EXT);
-        DebugMessageCallback.Invoke(OpenALDebugCallback, IntPtr.Zero);
+        debugCallback = OpenALDebugCallback;
+        DebugMessageCallback.Invoke(debugCallback, IntPtr.Zero);
     }
 
     /// <summary>
@@ -122,7 +126,7 @@ public class ALContext
                 attribs.Add(settings.HRTFID);
             }
             else
-                Log($"[OpenAL] Unable to enable HRTF as the {HRTF_EXTENSION} extension is missing");
+                LogWarning($"[OpenAL] Unable to enable HRTF as the {HRTF_EXTENSION} extension is missing");
         }
 
         attribs.Add(0);
@@ -232,7 +236,7 @@ public class ALContext
             _ => severity.ToString()
         };
 
-        Log($"OpenAL [{severityStr}] {sourceStr}/{typeStr}: {message}");
+        LogWarning($"OpenAL [{severityStr}] {sourceStr}/{typeStr}: {message}");
     }
 
 #if DEBUG

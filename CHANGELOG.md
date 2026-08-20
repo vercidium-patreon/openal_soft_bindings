@@ -1,3 +1,6 @@
+# Version 1.1.0
+Fixed a crash when ALDebugProc was invoked.
+
 # Version 1.0.9
 HRTF is now only enabled when ALContextSettings.HRTFEnabled is set to true.
 Added an ALSource.Duration field.
