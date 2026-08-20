@@ -1,4 +1,4 @@
-# Version 1.1.0
+# Version 1.0.10
 Fixed a crash when ALDebugProc was invoked.
 
 # Version 1.0.9

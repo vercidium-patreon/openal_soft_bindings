@@ -54,7 +54,7 @@ public class Context
         var logMessages = new List<string>();
         var settings = new ALContextSettings
         {
-            LogFunction = msg => logMessages.Add(msg)
+            LogWarning = msg => logMessages.Add(msg)
         };
 
         var context = new ALContext(device, settings);
@@ -238,7 +238,7 @@ public class Context
         var logMessages = new List<string>();
         var settings = new ALContextSettings
         {
-            LogFunction = msg => logMessages.Add(msg)
+            LogWarning = msg => logMessages.Add(msg)
         };
 
         var context = new ALContext(device, settings);
