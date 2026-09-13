@@ -152,8 +152,8 @@ public class ALContext
 
     /// <summary>
     /// Resumes processing on this context (use after Suspend)
-    /// <exception cref="Exception">Thrown if the context has been destroyed</exception>
     /// </summary>
+    /// <exception cref="Exception">Thrown if the context has been destroyed</exception>
     public void Process()
     {
         if (handle == IntPtr.Zero)
@@ -164,8 +164,8 @@ public class ALContext
 
     /// <summary>
     /// Destroys this context and cleans up resources
-    /// <exception cref="Exception">Thrown if the context has already been destroyed</exception>
     /// </summary>
+    /// <exception cref="Exception">Thrown if the context has already been destroyed</exception>
     public void Destroy()
     {
         if (handle == IntPtr.Zero)
