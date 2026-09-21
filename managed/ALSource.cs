@@ -34,6 +34,9 @@ public class ALSource
 
     /// <summary>Set the audio buffer to play</summary>
     public void SetBuffer(uint bufferID) => AL.Sourcei(ID, AL.AL_BUFFER, (int)bufferID);
+    /// <summary>Get the audio buffer attached to this source</summary>
+    public uint GetBuffer() => (uint)AL.GetSourcei(ID, AL.AL_BUFFER);
+
     /// <summary>Set the source gain (volume)</summary>
     public void SetGain(float gain) => AL.Sourcef(ID, AL.AL_GAIN, gain);
     /// <summary>Set the source pitch multiplier</summary>
