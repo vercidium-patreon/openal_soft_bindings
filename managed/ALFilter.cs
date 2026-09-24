@@ -21,7 +21,7 @@ public class ALFilter
     public float gainHF;
 
     /// <summary>
-    /// Create a new lowpass filter
+    /// Create a new low pass filter
     /// </summary>
     /// <param name="gain">The overall gain</param>
     /// <param name="gainHF">The high-frequency gain</param>
@@ -33,7 +33,15 @@ public class ALFilter
         AL.Filteri(ID, AL.AL_FILTER_TYPE, AL.AL_FILTER_LOWPASS);
 
         SetGain(gain, gainHF);
+
+#if DEBUG
+        stackTrace = Environment.StackTrace;
+#endif
     }
+
+#if DEBUG
+    string stackTrace;
+#endif
 
     /// <summary>
     /// Update the filter's gain parameters

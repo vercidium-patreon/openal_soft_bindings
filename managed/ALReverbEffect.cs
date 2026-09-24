@@ -19,7 +19,15 @@ public class ALReverbEffect
 
         // Apply the effect to the slot
         AL.AuxiliaryEffectSloti(effectSlotID, AL.AL_EFFECTSLOT_EFFECT, (int)effectID);
+
+#if DEBUG
+        stackTrace = Environment.StackTrace;
+#endif
     }
+
+#if DEBUG
+    string stackTrace;
+#endif
 
     /// <summary>
     /// Copy all reverb parameters from a preset

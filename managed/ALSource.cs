@@ -18,7 +18,16 @@ public class ALSource
     {
         Debug.Assert(ID > 0);
         this.ID = ID;
+
+#if DEBUG
+        stackTrace = Environment.StackTrace;
+#endif
     }
+
+#if DEBUG
+    string stackTrace;
+#endif
+
 
     /// <summary>The total duration of the source in milliseconds</summary>
     public int Duration;
